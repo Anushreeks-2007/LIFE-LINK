@@ -167,6 +167,10 @@ export function Navbar() {
           {/* Right Action Area */}
           <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSelector />
+            <div className="hidden sm:block">
+              <AuthButton />
+            </div>
+
 
             {/* Prominent Emergency Button */}
             <Link
