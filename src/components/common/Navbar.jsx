@@ -93,7 +93,7 @@ export function Navbar() {
                 <Link
                   to="/emergency"
                   onClick={closeMenu}
-                  className="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-md shadow-rose-600/50 hover:shadow-rose-700/70 emergency-pulse transition active:scale-95"
+                  className="inline-flex items-center gap-1.5 bg-rose-400 hover:bg-rose-400 text-white font-bold text-xs sm:text-sm px-2.5 py-2 rounded-xl shadow-md shadow-rose-400/30 hover:shadow-rose-500/50 emergency-pulse transition active:scale-75"
                   aria-label="Emergency Assistance"
                 >
                   <PhoneCall className="w-3.5 h-3.5 stroke-[1.5]" />
