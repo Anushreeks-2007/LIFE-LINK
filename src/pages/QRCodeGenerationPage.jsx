@@ -15,15 +15,16 @@ import {
   Copy,
   ExternalLink
 } from 'lucide-react';
-
+import { syncProfileToCloud } from '../services/emergencyPatientService';
 export function QRCodeGenerationPage() {
   const [profile, setProfile] = useState(null);
   const [copied, setCopied] = useState(false);
   const [revokeSuccess, setRevokeSuccess] = useState(false);
 
-  useEffect(() => {
-    dbGetProfileById('prof-demo-001').then((res) => {
+    useEffect(() => {
+    dbGetProfileById('prof-demo-001').then(async (res) => {
       setProfile(res);
+      await syncProfileToCloud(res);
     });
   }, []);
 
@@ -45,6 +46,7 @@ export function QRCodeGenerationPage() {
       updated_at: new Date().toISOString(),
     };
     await dbSaveProfile(newProfile);
+    await syncProfileToCloud(newProfile);
     setProfile(newProfile);
     setRevokeSuccess(true);
     setTimeout(() => setRevokeSuccess(false), 3000);
