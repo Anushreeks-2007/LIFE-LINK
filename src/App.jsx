@@ -31,7 +31,7 @@ import { MedicineInventoryManagementPage } from './pages/MedicineInventoryManage
 import { OfflineStatusPage } from './pages/OfflineStatusPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { PrivacyHelpPage } from './pages/PrivacyHelpPage';
-import { ResetPasswordPage } from './pages/ResetPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 export default function App() {
   return (

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Lock, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { updatePassword, onAuthChange, getCurrentUser, isDemoAuth } from '../services/authService';
 
-export default function ResetPasswordPage() {
+export function ResetPasswordPage() {
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
   const [password, setPassword] = useState('');
