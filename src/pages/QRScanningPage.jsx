@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { resolveQRProfileToken } from '../services/emergencyPatientService';
 import { useAuth, ROLES } from '../contexts/AuthContext';
+import { QRCameraScanner } from '../components/emergency/QRCameraScanner';
 import {
   QrCode,
   Camera,
@@ -24,6 +25,7 @@ export function QRScanningPage() {
   const [resolvedProfile, setResolvedProfile] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [cameraOn, setCameraOn] = useState(false);
 
   const handleResolveToken = async (tokenToTest) => {
     const cleanToken = (tokenToTest || inputToken).trim();
@@ -43,9 +45,16 @@ export function QRScanningPage() {
     }
   };
 
-  const handleSimulateDemoScan = () => {
-    setInputToken('LL-TOKEN-8F492E-SECURE');
-    handleResolveToken('LL-TOKEN-8F492E-SECURE');
+  
+    const handleCameraScan = (decodedText) => {
+    const text = (decodedText || '').trim();
+    console.log('Scanned QR text:', decodedText);
+    // Use the LL-TOKEN-... part if present, otherwise the raw QR text
+    const match = text.match(/LL-TOKEN-[A-Za-z0-9-]+/);
+    const token = match ? match[0] : text;
+    setCameraOn(false);
+    setInputToken(token);
+    handleResolveToken(token);
   };
 
   return (
@@ -87,25 +96,43 @@ export function QRScanningPage() {
 
       {/* Scanner Box */}
       <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-6">
-        {/* Video / Camera Scanner Viewport Mockup */}
-        <div className="relative aspect-video rounded-2xl bg-slate-950 flex flex-col items-center justify-center text-white overflow-hidden border-2 border-dashed border-teal-500/50">
-          <div className="w-48 h-48 border-2 border-emerald-400 rounded-2xl relative flex items-center justify-center animate-pulse">
-            <div className="absolute inset-x-0 top-1/2 h-0.5 bg-emerald-400 shadow-[0_0_12px_#34d399]" />
-            <Camera className="w-12 h-12 text-slate-600" />
-          </div>
+                {/* Camera Scanner Viewport */}
+        <div
+          className={`relative ${cameraOn ? 'py-4' : 'aspect-video'} rounded-2xl bg-slate-950 flex flex-col items-center justify-center text-white overflow-hidden border-2 border-dashed border-teal-500/50`}
+        >
+          {cameraOn ? (
+            <>
+              <QRCameraScanner onScan={handleCameraScan} />
+              <button
+                type="button"
+                onClick={() => setCameraOn(false)}
+                className="mt-3 bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs px-4 py-2 rounded-xl transition"
+              >
+                Stop Camera
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="w-48 h-48 border-2 border-emerald-400 rounded-2xl relative flex items-center justify-center animate-pulse">
+                <div className="absolute inset-x-0 top-1/2 h-0.5 bg-emerald-400 shadow-[0_0_12px_#34d399]" />
+                <Camera className="w-12 h-12 text-slate-600" />
+              </div>
 
-          <p className="text-xs text-slate-400 mt-3 font-medium">
-            Point camera at patient's printed or lockscreen QR card
-          </p>
+              <p className="text-xs text-slate-400 mt-3 font-medium">
+                Point camera at patient's printed or lockscreen QR card
+              </p>
 
-          {/* Quick Demo Simulator Button */}
-          <button
-            type="button"
-            onClick={handleSimulateDemoScan}
-            className="mt-3 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md transition"
-          >
-            Simulate Scan (Demo Token: LL-TOKEN-8F492E-SECURE)
-          </button>
+                            <div className="mt-3 flex flex-wrap gap-2 justify-center px-4">
+                <button
+                  type="button"
+                  onClick={() => setCameraOn(true)}
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md transition flex items-center gap-1.5"
+                >
+                  <Camera className="w-4 h-4" /> Start Camera
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Manual Token Fallback */}
