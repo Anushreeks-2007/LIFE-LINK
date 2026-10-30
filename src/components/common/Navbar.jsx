@@ -36,16 +36,16 @@ export function Navbar() {
   const roleLink = ROLE_LINK[role];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-3.5 gap-1">
+        <div className="flex items-center justify-between h-16 gap-1">
           {/* Brand Logo (always visible) */}
           <Link
             to={signedIn ? '/' : '/auth'}
             onClick={closeMenu}
             className="flex items-center gap-1 group focus:outline-none focus:ring-2 focus:ring-teal-600 rounded-lg p-1"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-900 to-teal-500 flex items-center justify-center text-white shadow-md shadow-teal-700/20 group-hover:scale-105 transition">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 flex items-center justify-center text-white shadow-md shadow-teal-700/20 group-hover:scale-105 transition">
               <Activity className="w-3.5 h-3.5 stroke-[1.5]" />
             </div>
             <div>
@@ -93,7 +93,7 @@ export function Navbar() {
                 <Link
                   to="/emergency"
                   onClick={closeMenu}
-                  className="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-md shadow-rose-400/30 hover:shadow-rose-700/70 emergency-pulse transition active:scale-95"
+                  className="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-md shadow-rose-600/50 hover:shadow-rose-700/70 emergency-pulse transition active:scale-95"
                   aria-label="Emergency Assistance"
                 >
                   <PhoneCall className="w-3.5 h-3.5 stroke-[1.5]" />
@@ -115,7 +115,7 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {signedIn && mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-slate-400 px-3 pt-2 pb-6 shadow-xl space-y-2">
+        <div className="lg:hidden bg-white border-b border-slate-600 px-3 pt-2 pb-6 shadow-xl space-y-2">
           <div className="grid grid-cols-2 gap-2 pb-2">
             {COMMON_LINKS.map(({ to, icon: Icon, label }) => (
               <Link
@@ -124,7 +124,7 @@ export function Navbar() {
                 onClick={closeMenu}
                 className="flex items-center gap-2 p-1.5 rounded-lg bg-slate-50 hover:bg-teal-50 text-slate-800 text-xs font-semibold"
               >
-                <Icon className="w-3.5 h-3.5 text-teal-600" />
+                <Icon className="w-3.5 h-3.5 text-teal-800" />
                 {t(label)}
               </Link>
             ))}
@@ -146,7 +146,7 @@ export function Navbar() {
               onClick={closeMenu}
               className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100"
             >
-              <Activity className="w-3.5 h-3.5 text-slate-500" />
+              <Activity className="w-3.5 h-3.5 text-slate-700" />
               {t('navSettings')}
             </Link>
             <Link
@@ -166,3 +166,4 @@ export function Navbar() {
     </header>
   );
 }
+
