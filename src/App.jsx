@@ -52,14 +52,14 @@ export default function App() {
                 <Routes>
                   {/* Public */}
                   <Route path="/auth" element={<AuthPage />} />
+                  <Route path="/select-role" element={<RoleSelectPage />} />
+                  <Route path="/login/:role" element={<RoleLoginPage />} />
                   <Route path="/reset-password" element={<ResetPasswordPage />} />
                   <Route path="/privacy-help" element={<PrivacyHelpPage />} />
 
                   {/* Any signed-in user */}
                   <Route element={<RequireAuth />}>
                     <Route path="/" element={<LandingPage />} />
-                    <Route path="/select-role" element={<RoleSelectPage />} />
-                    <Route path="/login/:role" element={<RoleLoginPage />} />
                     <Route path="/hospitals" element={<HospitalDiscoveryPage />} />
                     <Route path="/hospitals/:id" element={<HospitalDetailsPage />} />
                     <Route path="/map" element={<InteractiveHospitalMapPage />} />
