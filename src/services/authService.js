@@ -51,7 +51,6 @@ export async function signUp({ name, email, password }) {
   // If "Confirm email" is on in Supabase, there is no session until the link is clicked.
   return { user: data.user, needsEmailConfirmation: !data.session };
 }
-
 export async function signIn({ email, password }) {
   email = email.trim().toLowerCase();
 
@@ -137,6 +136,12 @@ export function onAuthChange(cb) {
   );
   return () => data.subscription.unsubscribe();
 }
+
+export const ROLE_INFO = {
+  patient: "Patients can change their password using this page.",
+  staff: "Staff members can change their account password here.",
+  admin: "Administrators can change their account password here."
+};
 
 export const changeRolePassword = async (newPassword) => {
   const { data, error } = await supabase.auth.updateUser({
