@@ -24,7 +24,7 @@ const ROLE_LINK = {
   citizen: { to: '/profile', icon: User, label: 'navProfile', active: 'bg-slate-100 text-slate-900', idle: 'text-slate-600 hover:text-slate-900 hover:bg-slate-50', iconCls: 'text-slate-500' },
 };
 
-const linkBase = 'inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition';
+const linkBase = 'inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-medium';
 
 export function Navbar() {
   const { t } = useLanguage();
@@ -43,10 +43,10 @@ export function Navbar() {
           <Link
             to={signedIn ? '/' : '/auth'}
             onClick={closeMenu}
-            className="flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-teal-600 rounded-lg p-1"
+            className="flex items-center gap-1.5 group focus:outline-none focus:ring-2 focus:ring-teal-600 rounded-lg p-1"
           >
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 flex items-center justify-center text-white shadow-md shadow-teal-700/20 group-hover:scale-105 transition">
-              <Activity className="w-6 h-6 stroke-[2.5]" />
+              <Activity className="w-6 h-6 stroke-[1.5]" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
@@ -96,7 +96,7 @@ export function Navbar() {
                   className="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-md shadow-rose-600/30 hover:shadow-rose-600/50 emergency-pulse transition active:scale-95"
                   aria-label="Emergency Assistance"
                 >
-                  <PhoneCall className="w-4 h-4 stroke-[2.5]" />
+                  <PhoneCall className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span className="tracking-wide uppercase font-extrabold">Emergency</span>
                 </Link>
                 <button
@@ -124,7 +124,7 @@ export function Navbar() {
                 onClick={closeMenu}
                 className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 hover:bg-teal-50 text-slate-800 text-xs font-semibold"
               >
-                <Icon className="w-4 h-4 text-teal-600" />
+                <Icon className="w-3.5 h-3.5 text-teal-600" />
                 {t(label)}
               </Link>
             ))}
@@ -137,7 +137,7 @@ export function Navbar() {
                 onClick={closeMenu}
                 className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100"
               >
-                <roleLink.icon className={`w-4 h-4 ${roleLink.iconCls}`} />
+                <roleLink.icon className={`w-3.5 h-3.5 ${roleLink.iconCls}`} />
                 {t(roleLink.label)}
               </Link>
             )}
@@ -146,7 +146,7 @@ export function Navbar() {
               onClick={closeMenu}
               className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100"
             >
-              <Activity className="w-4 h-4 text-slate-500" />
+              <Activity className="w-3.5 h-3.5 text-slate-500" />
               {t('navSettings')}
             </Link>
             <Link
@@ -154,7 +154,7 @@ export function Navbar() {
               onClick={closeMenu}
               className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100"
             >
-              <AlertCircle className="w-4 h-4 text-slate-500" />
+              <AlertCircle className="w-3.5 h-3.5 text-slate-500" />
               {t('navPrivacy')}
             </Link>
             <div className="pt-3" onClick={closeMenu}>
