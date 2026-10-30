@@ -31,6 +31,7 @@ import { MedicineInventoryManagementPage } from './pages/MedicineInventoryManage
 import { OfflineStatusPage } from './pages/OfflineStatusPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { PrivacyHelpPage } from './pages/PrivacyHelpPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 export default function App() {
   return (
@@ -80,6 +81,9 @@ export default function App() {
                   <Route path="/offline-status" element={<OfflineStatusPage />} />
                   <Route path="/settings" element={<SettingsPage />} />
                   <Route path="/privacy-help" element={<PrivacyHelpPage />} />
+
+                  <Route path="/auth" element={<AuthPage />} />
+                  <Route path="/reset-password" element={<ResetPasswordPage />} />
 
                   {/* Fallback to Home */}
                   <Route path="*" element={<Navigate to="/" replace />} />
