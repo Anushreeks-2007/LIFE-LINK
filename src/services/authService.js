@@ -1,13 +1,6 @@
-import * as client from './supabaseClient';
+import { supabase, isSupabaseConfigured } from './supabaseClient';
 
-// Works whether supabaseClient.js exports `supabase` (named) or a default export.
-const supabase = client.supabase ?? client.default ?? null;
-
-export const isDemoAuth =
-  !import.meta.env.VITE_SUPABASE_URL ||
-  !import.meta.env.VITE_SUPABASE_ANON_KEY ||
-  !supabase;
-
+export const isDemoAuth = !isSupabaseConfigured || !supabase;
 /* ------------------------------ demo helpers ------------------------------ */
 const USERS_KEY = 'lifelink_demo_users';
 const SESSION_KEY = 'lifelink_demo_session';
