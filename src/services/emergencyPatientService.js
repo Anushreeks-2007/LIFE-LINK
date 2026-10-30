@@ -8,7 +8,15 @@ import {
   dbEnqueueSyncAction,
   ensureSeedData
 } from './db';
+import * as sbModule from './supabaseClient';
 
+const cloud = sbModule.supabase || sbModule.default || null;
+const cloudOn = !!(
+  import.meta.env.VITE_SUPABASE_URL &&
+  import.meta.env.VITE_SUPABASE_ANON_KEY &&
+  cloud &&
+  cloud.rpc
+);
 /**
  * Generates an unpredictable, unique temporary patient identifier
  */
@@ -193,12 +201,34 @@ export async function linkPatientToVerifiedProfile({
   return patient;
 }
 
-/**
- * Fetches emergency profile by secure QR token reference
- */
-export async function resolveQRProfileToken(token) {
+function normalizeToken(raw) {
+  let text = (raw || '').trim();
+  try { text = decodeURIComponent(text); } catch (e) { /* ignore */ }
+  const match = text.match(/LL-TOKEN-[A-Za-z0-9-]+/i);
+  return (match ? match[0] : text).toUpperCase();
+}
+
+export async function syncProfileToCloud(profile) {
+  if (!cloudOn || !profile || !profile.qr_token) return;
+  const { error } = await cloud.rpc('upsert_shared_profile', { p_profile: profile });
+  if (error) console.warn('Cloud profile sync failed:', error.message);
+}
+
+export async function resolveQRProfileToken(rawToken) {
   await ensureSeedData();
-  const profile = await dbGetProfileByQRToken(token);
+  const token = normalizeToken(rawToken);
+  let profile = null;
+
+  if (cloudOn) {
+    const { data, error } = await cloud.rpc('get_shared_profile', { p_token: token });
+    if (error) console.warn('Cloud lookup error:', error.message);
+    if (data) profile = data;
+  }
+
+  if (!profile) {
+    profile = await dbGetProfileByQRToken(token);
+  }
+
   if (!profile) {
     throw new Error('Invalid or unrecognized emergency QR token.');
   }
@@ -226,6 +256,7 @@ export async function saveEmergencyProfile(profileData) {
   };
 
   await dbSaveProfile(updatedProfile);
+  await syncProfileToCloud(updatedProfile);
   return updatedProfile;
 }
 
@@ -238,5 +269,6 @@ export async function revokeEmergencyQRToken(profileId) {
   profile.is_revoked = true;
   profile.revoked_at = new Date().toISOString();
   await dbSaveProfile(profile);
+  await syncProfileToCloud(profile);
   return profile;
 }
