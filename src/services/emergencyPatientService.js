@@ -1,0 +1,242 @@
+import {
+  dbGetEmergencyPatients,
+  dbGetEmergencyPatientById,
+  dbSaveEmergencyPatient,
+  dbGetProfileById,
+  dbGetProfileByQRToken,
+  dbSaveProfile,
+  dbEnqueueSyncAction,
+  ensureSeedData
+} from './db';
+
+/**
+ * Generates an unpredictable, unique temporary patient identifier
+ */
+export function generateTemporaryPatientId() {
+  const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+  return `LL-EMG-${randomSuffix}`;
+}
+
+/**
+ * Registers a new unidentified or unconscious patient
+ */
+export async function registerUnidentifiedPatient({
+  foundLocation,
+  estimatedAge = '',
+  apparentGender = 'Unknown',
+  emergencyObservations,
+  currentHospitalId,
+  reportedBy = 'Authorized Emergency Staff',
+  triageColor = 'RED (Immediate / Critical)',
+  isOffline = false,
+}) {
+  await ensureSeedData();
+  const id = `pat-emg-${Date.now().toString(36)}`;
+  const temporaryPatientId = generateTemporaryPatientId();
+  const now = new Date().toISOString();
+
+  const newPatient = {
+    id,
+    temporary_patient_id: temporaryPatientId,
+    identification_status: 'unidentified',
+    linked_profile_id: null,
+    current_hospital_id: currentHospitalId,
+    found_location: foundLocation,
+    estimated_age: estimatedAge,
+    apparent_gender: apparentGender,
+    triage_color: triageColor,
+    emergency_observations: emergencyObservations,
+    reported_by: reportedBy,
+    registration_time: now,
+    created_at: now,
+    updated_at: now,
+    transfers: [],
+    events: [
+      {
+        id: `ev-${Date.now().toString(36)}`,
+        event_type: 'PATIENT_INTAKE',
+        event_summary: `Intake registered at scene. Temporary identifier ${temporaryPatientId} assigned.`,
+        created_by: reportedBy,
+        created_at: now,
+      },
+    ],
+    notification_logs: [],
+  };
+
+  await dbSaveEmergencyPatient(newPatient);
+
+  if (isOffline) {
+    await dbEnqueueSyncAction('CREATE_PATIENT', {
+      patient: newPatient,
+    });
+  }
+
+  return newPatient;
+}
+
+/**
+ * Retrieves all registered emergency patients
+ */
+export async function getEmergencyPatients() {
+  await ensureSeedData();
+  return dbGetEmergencyPatients();
+}
+
+/**
+ * Retrieves an emergency patient by ID or temporary ID
+ */
+export async function getEmergencyPatient(id) {
+  await ensureSeedData();
+  const patients = await dbGetEmergencyPatients();
+  return patients.find(
+    (p) => p.id === id || p.temporary_patient_id === id
+  ) || null;
+}
+
+/**
+ * Records an inter-hospital transfer with clinical handover notes
+ */
+export async function recordPatientTransfer({
+  patientId,
+  sourceHospitalId,
+  destinationHospitalId,
+  reason,
+  handoverNotes,
+  transportUnit = 'Emergency ALS Transport',
+  authorizedOfficer,
+  isOffline = false,
+}) {
+  const patient = await getEmergencyPatient(patientId);
+  if (!patient) throw new Error('Emergency patient record not found');
+
+  const now = new Date().toISOString();
+  const transferEntry = {
+    id: `tr-${Date.now().toString(36)}`,
+    emergency_patient_id: patient.id,
+    source_hospital_id: sourceHospitalId,
+    destination_hospital_id: destinationHospitalId,
+    transfer_time: now,
+    reason,
+    handover_notes: handoverNotes,
+    transport_unit: transportUnit,
+    authorized_officer: authorizedOfficer,
+  };
+
+  patient.current_hospital_id = destinationHospitalId;
+  patient.transfers = [transferEntry, ...(patient.transfers || [])];
+  patient.events = [
+    {
+      id: `ev-${Date.now().toString(36)}`,
+      event_type: 'TRANSFER_DISPATCHED',
+      event_summary: `Transferred to hospital ${destinationHospitalId}. Reason: ${reason}`,
+      created_by: authorizedOfficer,
+      created_at: now,
+    },
+    ...(patient.events || []),
+  ];
+
+  await dbSaveEmergencyPatient(patient);
+
+  if (isOffline) {
+    await dbEnqueueSyncAction('RECORD_TRANSFER', {
+      patient,
+      transfer: transferEntry,
+    });
+  }
+
+  return patient;
+}
+
+/**
+ * Links an unidentified patient record to a verified registered profile
+ */
+export async function linkPatientToVerifiedProfile({
+  patientId,
+  profileId,
+  authorizedOfficer,
+  verificationNotes,
+  isOffline = false,
+}) {
+  const patient = await getEmergencyPatient(patientId);
+  if (!patient) throw new Error('Emergency patient not found');
+
+  const profile = await dbGetProfileById(profileId);
+  if (!profile) throw new Error('Verified profile not found');
+
+  const now = new Date().toISOString();
+  patient.identification_status = 'verified_linked';
+  patient.linked_profile_id = profile.id;
+  patient.linked_profile_name = profile.name;
+  patient.linked_profile = profile;
+
+  patient.events = [
+    {
+      id: `ev-${Date.now().toString(36)}`,
+      event_type: 'IDENTITY_VERIFIED_AND_LINKED',
+      event_summary: `Identity verified as ${profile.name} by ${authorizedOfficer}. Notes: ${verificationNotes}`,
+      created_by: authorizedOfficer,
+      created_at: now,
+    },
+    ...(patient.events || []),
+  ];
+
+  await dbSaveEmergencyPatient(patient);
+
+  if (isOffline) {
+    await dbEnqueueSyncAction('LINK_PATIENT_IDENTITY', {
+      patientId,
+      profileId,
+      authorizedOfficer,
+    });
+  }
+
+  return patient;
+}
+
+/**
+ * Fetches emergency profile by secure QR token reference
+ */
+export async function resolveQRProfileToken(token) {
+  await ensureSeedData();
+  const profile = await dbGetProfileByQRToken(token);
+  if (!profile) {
+    throw new Error('Invalid or unrecognized emergency QR token.');
+  }
+  if (profile.is_revoked) {
+    throw new Error('This emergency QR token has been revoked by the patient.');
+  }
+  return profile;
+}
+
+/**
+ * Generates or updates personal emergency profile
+ */
+export async function saveEmergencyProfile(profileData) {
+  await ensureSeedData();
+  const now = new Date().toISOString();
+  const id = profileData.id || `prof-${Date.now().toString(36)}`;
+  const qr_token = profileData.qr_token || `LL-TOKEN-${Math.random().toString(36).substring(2, 8).toUpperCase()}-SECURE`;
+
+  const updatedProfile = {
+    ...profileData,
+    id,
+    qr_token,
+    is_revoked: false,
+    updated_at: now,
+  };
+
+  await dbSaveProfile(updatedProfile);
+  return updatedProfile;
+}
+
+/**
+ * Revokes a user's QR profile token
+ */
+export async function revokeEmergencyQRToken(profileId) {
+  const profile = await dbGetProfileById(profileId);
+  if (!profile) throw new Error('Profile not found');
+  profile.is_revoked = true;
+  profile.revoked_at = new Date().toISOString();
+  await dbSaveProfile(profile);
+  return profile;
+}
