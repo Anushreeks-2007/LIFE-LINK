@@ -33,7 +33,7 @@ import { SettingsPage } from './pages/SettingsPage';
 import { PrivacyHelpPage } from './pages/PrivacyHelpPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 
-export function App() {
+export default function App() {
   return (
     <LanguageProvider>
       <AuthProvider>
