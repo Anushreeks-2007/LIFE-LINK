@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useAuth, ROLES } from '../../contexts/AuthContext';
 import { LanguageSelector } from './LanguageSelector';
+import { AuthButton } from './AuthButton';
 import {
   Activity,
   PhoneCall,
