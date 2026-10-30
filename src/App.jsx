@@ -33,6 +33,9 @@ import { SettingsPage } from './pages/SettingsPage';
 import { PrivacyHelpPage } from './pages/PrivacyHelpPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
+import { RoleSelectPage } from './pages/RoleSelectPage';
+import { RoleLoginPage } from './pages/RoleLoginPage';
+
 
 export default function App() {
   return (
@@ -55,6 +58,8 @@ export default function App() {
                   {/* Any signed-in user */}
                   <Route element={<RequireAuth />}>
                     <Route path="/" element={<LandingPage />} />
+                    <Route path="/select-role" element={<RoleSelectPage />} />
+                    <Route path="/login/:role" element={<RoleLoginPage />} />
                     <Route path="/hospitals" element={<HospitalDiscoveryPage />} />
                     <Route path="/hospitals/:id" element={<HospitalDetailsPage />} />
                     <Route path="/map" element={<InteractiveHospitalMapPage />} />

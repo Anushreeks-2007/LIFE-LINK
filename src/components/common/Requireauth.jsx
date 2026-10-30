@@ -1,32 +1,31 @@
-// src/components/common/RequireAuth.jsx
-// Wrap routes with this to force login. Unauthenticated visitors are sent to /auth
-// and returned to the page they wanted after signing in.
-import { useEffect, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
-import { getCurrentUser, onAuthChange } from '../../services/authService';
+import { useSession } from '../../hooks/useSession';
 
-export function RequireAuth({ children }) {
+// <RequireAuth />                 any signed-in user
+// <RequireAuth roles={['admin']} /> only those roles
+export function RequireAuth({ roles }) {
+  const { user, loading } = useSession();
   const location = useLocation();
-  const [user, setUser] = useState(undefined); // undefined = still checking
 
-  useEffect(() => {
-    let active = true;
-    getCurrentUser().then((u) => active && setUser(u));
-    const off = onAuthChange((u) => active && setUser(u));
-    return () => {
-      active = false;
-      off();
-    };
-  }, []);
-
-  if (user === undefined) {
+  if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center text-slate-500">
         <Loader2 className="h-6 w-6 animate-spin" />
       </div>
     );
   }
-  if (!user) return <Navigate to="/auth" state={{ from: location }} replace />;
-  return children;
+
+  // Not signed in: ask for the role first.
+  if (!user) return <Navigate to="/select-role" state={{ from: location }} replace />;
+
+  // Staff/admin still on the default password must change it first.
+  // Delete this block if you want the change to be optional.
+  if (user.mustChange && location.pathname !== '/change-password') {
+    return <Navigate to="/change-password" replace />;
+  }
+
+  if (roles && !roles.includes(user.role)) return <Navigate to="/" replace />;
+
+  return <Outlet />;
 }

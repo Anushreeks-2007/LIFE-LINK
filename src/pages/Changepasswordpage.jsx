@@ -26,7 +26,7 @@ export default function ChangePasswordPage() {
 
     setBusy(true);
     try {
-      await changeRolePassword(user.role, form.current, form.next);
+      await changeRolePassword(form.current, form.next);
       setDone(true);
       setForm({ current: '', next: '', confirm: '' });
     } catch (err) {
