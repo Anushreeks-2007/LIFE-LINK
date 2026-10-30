@@ -1,268 +1,162 @@
+// src/components/common/Navbar.jsx
+// Before sign-in: only the brand logo. After sign-in: links for the signed-in role.
 import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { useAuth, ROLES } from '../../contexts/AuthContext';
+import { useSession } from '../../hooks/useSession';
 import { LanguageSelector } from './LanguageSelector';
+import { AuthButton } from './AuthButton';
 import {
-  Activity,
-  PhoneCall,
-  Search,
-  MapPin,
-  Mic,
-  Database,
-  Building2,
-  Stethoscope,
-  User,
-  Menu,
-  X,
-  QrCode,
-  AlertCircle
+  Activity, PhoneCall, Search, MapPin, Mic, Database,
+  Building2, Stethoscope, User, Menu, X, AlertCircle,
 } from 'lucide-react';
+
+const COMMON_LINKS = [
+  { to: '/hospitals', icon: Search, label: 'navHospitals' },
+  { to: '/map', icon: MapPin, label: 'navMap' },
+  { to: '/voice-assistant', icon: Mic, label: 'navVoice' },
+  { to: '/offline-status', icon: Database, label: 'navOffline' },
+];
+
+const ROLE_LINK = {
+  admin: { to: '/admin', icon: Building2, label: 'navAdmin', active: 'bg-sky-100 text-sky-900', idle: 'text-sky-700 hover:bg-sky-50', iconCls: 'text-sky-600' },
+  staff: { to: '/staff/scan', icon: Stethoscope, label: 'navStaff', active: 'bg-emerald-100 text-emerald-900', idle: 'text-emerald-700 hover:bg-emerald-50', iconCls: 'text-emerald-600' },
+  citizen: { to: '/profile', icon: User, label: 'navProfile', active: 'bg-slate-100 text-slate-900', idle: 'text-slate-600 hover:text-slate-900 hover:bg-slate-50', iconCls: 'text-slate-500' },
+};
+
+// whitespace-nowrap keeps every label on one line
+const linkBase = 'inline-flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors';
 
 export function Navbar() {
   const { t } = useLanguage();
-  const { role, user } = useAuth();
+  const { user, role } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
   const closeMenu = () => setMobileMenuOpen(false);
+
+  const signedIn = Boolean(user);
+  const roleLink = ROLE_LINK[role];
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-3">
-          {/* Brand Logo */}
+          {/* Brand logo: never shrinks, never wraps */}
           <Link
-            to="/"
+            to={signedIn ? '/' : '/select-role'}
             onClick={closeMenu}
-            className="flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-teal-600 rounded-lg p-1"
+            className="flex shrink-0 items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-teal-600 rounded-lg p-1"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 flex items-center justify-center text-white shadow-md shadow-teal-700/20 group-hover:scale-105 transition">
-              <Activity className="w-6 h-6 stroke-[2.5]" />
+            <div className="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 flex items-center justify-center text-white shadow-md shadow-teal-700/20 group-hover:scale-105 transition">
+              <Activity className="w-5 h-5 stroke-[1.75]" />
             </div>
-            <div>
+            <div className="leading-tight">
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-lg tracking-tight text-slate-900 group-hover:text-teal-700 transition">
+                <span className="whitespace-nowrap font-extrabold text-lg tracking-tight text-slate-900 group-hover:text-teal-900 transition">
                   LIFE-LINK
                 </span>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200">
+                <span className="hidden sm:inline text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200">
                   Health
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500 font-medium hidden sm:block">
+              <p className="hidden xl:block whitespace-nowrap text-[10px] text-slate-600 font-medium">
                 Connecting Lives, Saving Time.
               </p>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-            <NavLink
-              to="/hospitals"
-              className={({ isActive }) =>
-                `inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                  isActive
-                    ? 'bg-teal-50 text-teal-800'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`
-              }
-            >
-              <Search className="w-4 h-4 text-teal-600" />
-              {t('navHospitals')}
-            </NavLink>
+          {signedIn && (
+            <>
+              {/* Desktop links (xl and up; smaller screens use the menu button) */}
+              <nav className="hidden xl:flex items-center gap-1">
+                {COMMON_LINKS.map(({ to, icon: Icon, label }) => (
+                  <NavLink
+                    key={to}
+                    to={to}
+                    className={({ isActive }) =>
+                      `${linkBase} ${isActive ? 'bg-teal-50 text-teal-700' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`
+                    }
+                  >
+                    <Icon className="w-3.5 h-3.5 text-teal-700" />
+                    {t(label)}
+                  </NavLink>
+                ))}
+                {roleLink && (
+                  <NavLink
+                    to={roleLink.to}
+                    className={({ isActive }) => `${linkBase} ${isActive ? roleLink.active : roleLink.idle}`}
+                  >
+                    <roleLink.icon className={`w-3.5 h-3.5 ${roleLink.iconCls}`} />
+                    {t(roleLink.label)}
+                  </NavLink>
+                )}
+              </nav>
 
-            <NavLink
-              to="/map"
-              className={({ isActive }) =>
-                `inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                  isActive
-                    ? 'bg-teal-50 text-teal-800'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`
-              }
-            >
-              <MapPin className="w-4 h-4 text-teal-600" />
-              {t('navMap')}
-            </NavLink>
-
-            <NavLink
-              to="/voice-assistant"
-              className={({ isActive }) =>
-                `inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                  isActive
-                    ? 'bg-teal-50 text-teal-800'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`
-              }
-            >
-              <Mic className="w-4 h-4 text-teal-600" />
-              {t('navVoice')}
-            </NavLink>
-
-            <NavLink
-              to="/offline-status"
-              className={({ isActive }) =>
-                `inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                  isActive
-                    ? 'bg-teal-50 text-teal-800'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`
-              }
-            >
-              <Database className="w-4 h-4 text-teal-600" />
-              {t('navOffline')}
-            </NavLink>
-
-            {/* Role-Specific Nav Item */}
-            {role === ROLES.HOSPITAL_ADMIN && (
-              <NavLink
-                to="/admin"
-                className={({ isActive }) =>
-                  `inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                    isActive
-                      ? 'bg-sky-100 text-sky-900'
-                      : 'text-sky-700 hover:bg-sky-50'
-                  }`
-                }
-              >
-                <Building2 className="w-4 h-4 text-sky-600" />
-                {t('navAdmin')}
-              </NavLink>
-            )}
-
-            {role === ROLES.HEALTHCARE_STAFF && (
-              <NavLink
-                to="/staff/scan"
-                className={({ isActive }) =>
-                  `inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                    isActive
-                      ? 'bg-emerald-100 text-emerald-900'
-                      : 'text-emerald-700 hover:bg-emerald-50'
-                  }`
-                }
-              >
-                <Stethoscope className="w-4 h-4 text-emerald-600" />
-                {t('navStaff')}
-              </NavLink>
-            )}
-
-            {role === ROLES.PUBLIC && (
-              <NavLink
-                to="/profile"
-                className={({ isActive }) =>
-                  `inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                    isActive
-                      ? 'bg-slate-100 text-slate-900'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                  }`
-                }
-              >
-                <User className="w-4 h-4 text-slate-500" />
-                {t('navProfile')}
-              </NavLink>
-            )}
-          </nav>
-
-          {/* Right Action Area */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <LanguageSelector />
-
-            {/* Prominent Emergency Button */}
-            <Link
-              to="/emergency"
-              onClick={closeMenu}
-              className="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-md shadow-rose-600/30 hover:shadow-rose-600/50 emergency-pulse transition active:scale-95"
-              aria-label="Emergency Assistance"
-            >
-              <PhoneCall className="w-4 h-4 stroke-[2.5]" />
-              <span className="tracking-wide uppercase font-extrabold">Emergency</span>
-            </Link>
-
-            {/* Mobile Menu Trigger */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none"
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+              {/* Right actions */}
+              <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                <div className="shrink-0">
+                  <LanguageSelector />
+                </div>
+                <div className="hidden xl:block">
+                  <AuthButton />
+                </div>
+                <Link
+                  to="/emergency"
+                  onClick={closeMenu}
+                  className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-3 py-2 rounded-xl shadow-md shadow-rose-600/40 emergency-pulse transition active:scale-95"
+                  aria-label="Emergency Assistance"
+                >
+                  <PhoneCall className="w-3.5 h-3.5" />
+                  <span className="tracking-wide uppercase font-extrabold">Emergency</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="xl:hidden p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                  aria-label="Toggle navigation menu"
+                  aria-expanded={mobileMenuOpen}
+                >
+                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 shadow-xl space-y-2 animate-in slide-in-from-top duration-200">
+      {/* Mobile / tablet menu */}
+      {signedIn && mobileMenuOpen && (
+        <div className="xl:hidden bg-white border-b border-slate-200 px-3 pt-2 pb-6 shadow-xl space-y-2">
           <div className="grid grid-cols-2 gap-2 pb-2">
-            <Link
-              to="/hospitals"
-              onClick={closeMenu}
-              className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 hover:bg-teal-50 text-slate-800 text-xs font-semibold"
-            >
-              <Search className="w-4 h-4 text-teal-600" />
-              {t('navHospitals')}
-            </Link>
-            <Link
-              to="/map"
-              onClick={closeMenu}
-              className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 hover:bg-teal-50 text-slate-800 text-xs font-semibold"
-            >
-              <MapPin className="w-4 h-4 text-teal-600" />
-              {t('navMap')}
-            </Link>
-            <Link
-              to="/voice-assistant"
-              onClick={closeMenu}
-              className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 hover:bg-teal-50 text-slate-800 text-xs font-semibold"
-            >
-              <Mic className="w-4 h-4 text-teal-600" />
-              {t('navVoice')}
-            </Link>
-            <Link
-              to="/offline-status"
-              onClick={closeMenu}
-              className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 hover:bg-teal-50 text-slate-800 text-xs font-semibold"
-            >
-              <Database className="w-4 h-4 text-teal-600" />
-              {t('navOffline')}
-            </Link>
+            {COMMON_LINKS.map(({ to, icon: Icon, label }) => (
+              <Link
+                key={to}
+                to={to}
+                onClick={closeMenu}
+                className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 hover:bg-teal-50 text-slate-800 text-xs font-semibold"
+              >
+                <Icon className="w-4 h-4 text-teal-800" />
+                {t(label)}
+              </Link>
+            ))}
           </div>
 
           <div className="border-t border-slate-100 pt-3 space-y-1">
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">
-              Role Workflows
-            </p>
-            <Link
-              to="/profile"
-              onClick={closeMenu}
-              className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100"
-            >
-              <User className="w-4 h-4 text-slate-500" />
-              Emergency Profile & My QR Code
-            </Link>
-            <Link
-              to="/staff/scan"
-              onClick={closeMenu}
-              className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100"
-            >
-              <QrCode className="w-4 h-4 text-emerald-600" />
-              Scan Patient QR / Unidentified Intake
-            </Link>
-            <Link
-              to="/admin"
-              onClick={closeMenu}
-              className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100"
-            >
-              <Building2 className="w-4 h-4 text-sky-600" />
-              Hospital Bed & Medicine Management
-            </Link>
+            {roleLink && (
+              <Link
+                to={roleLink.to}
+                onClick={closeMenu}
+                className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-900 hover:bg-slate-100"
+              >
+                <roleLink.icon className={`w-4 h-4 ${roleLink.iconCls}`} />
+                {t(roleLink.label)}
+              </Link>
+            )}
             <Link
               to="/settings"
               onClick={closeMenu}
               className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100"
             >
-              <Activity className="w-4 h-4 text-slate-500" />
+              <Activity className="w-4 h-4 text-slate-700" />
               {t('navSettings')}
             </Link>
             <Link
@@ -270,9 +164,12 @@ export function Navbar() {
               onClick={closeMenu}
               className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100"
             >
-              <AlertCircle className="w-4 h-4 text-slate-500" />
+              <AlertCircle className="w-4 h-4 text-slate-700" />
               {t('navPrivacy')}
             </Link>
+            <div className="pt-2" onClick={closeMenu}>
+              <AuthButton />
+            </div>
           </div>
         </div>
       )}
