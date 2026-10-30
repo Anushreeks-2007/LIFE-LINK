@@ -1,166 +1,307 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth, ROLES } from '../contexts/AuthContext';
-import { ShieldCheck, User, Building2, Stethoscope, Lock, Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
-
-export function AuthPage() {
-  const { loginDemo, role, user, isSupabaseConfigured } = useAuth();
-  const navigate = useNavigate();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [authMsg, setAuthMsg] = useState(null);
-
-  const handleDemoSignIn = (selectedRole) => {
-    loginDemo(selectedRole);
-    if (selectedRole === ROLES.HOSPITAL_ADMIN) {
-      navigate('/admin');
-    } else if (selectedRole === ROLES.HEALTHCARE_STAFF) {
-      navigate('/staff/scan');
-    } else {
-      navigate('/profile');
-    }
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    if (!email) return;
-    // In demo mode, sign in as public or matched role
-    loginDemo(ROLES.PUBLIC);
-    setAuthMsg('Authenticated in local demonstration mode.');
-    setTimeout(() => navigate('/profile'), 600);
-  };
-
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff, Mail, Lock, User, AlertCircle, CheckCircle2, Loader2, HeartPulse } from 'lucide-react';
+import {
+  isDemoAuth,
+  signUp,
+  signIn,
+  signInWithGoogle,
+  sendPasswordReset,
+  getCurrentUser,
+  onAuthChange,
+} from '../services/authService';
+ 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ 
+function GoogleLogo() {
   return (
-    <div className="max-w-md mx-auto px-4 py-12 space-y-8">
-      <div className="text-center space-y-2">
-        <div className="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center mx-auto">
-          <Lock className="w-6 h-6" />
-        </div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-          LIFE-LINK Portal Access
-        </h1>
-        <p className="text-xs text-slate-500">
-          Sign in to manage your emergency profile, staff workflows, or hospital facilities.
-        </p>
+    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.9 2.4 30.4 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
+      <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z" />
+      <path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z" />
+      <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
+    </svg>
+  );
+}
+ 
+function Field({ id, label, icon: Icon, type = 'text', value, onChange, autoComplete, right, hint }) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-1 block text-sm font-medium text-slate-700">
+        {label}
+      </label>
+      <div className="relative">
+        <Icon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <input
+          id={id}
+          name={id}
+          type={type}
+          value={value}
+          onChange={onChange}
+          autoComplete={autoComplete}
+          className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-10 pr-10 text-slate-900 placeholder-slate-400 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/30"
+        />
+        {right}
       </div>
-
-      {/* 1-Click Role-Based Demo Login */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm space-y-4">
-        <div>
-          <span className="text-[10px] font-black uppercase tracking-wider text-teal-700 block mb-1">
-            Quick Testing Access
-          </span>
-          <h2 className="font-bold text-sm text-slate-900">
-            Sign In with a Demonstration Role
-          </h2>
-          <p className="text-[11px] text-slate-500 mt-0.5">
-            Test role-based permissions with pre-configured synthetic profiles.
-          </p>
-        </div>
-
-        <div className="space-y-2.5">
-          <button
-            type="button"
-            onClick={() => handleDemoSignIn(ROLES.PUBLIC)}
-            className="w-full text-left p-3.5 rounded-2xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/40 transition flex items-center justify-between group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center">
-                <User className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="font-bold text-xs text-slate-900 block">Public Citizen / Patient</span>
-                <span className="text-[10px] text-slate-500">Emergency Profile & QR Code</span>
-              </div>
-            </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-700 transition" />
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleDemoSignIn(ROLES.HEALTHCARE_STAFF)}
-            className="w-full text-left p-3.5 rounded-2xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/40 transition flex items-center justify-between group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
-                <Stethoscope className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="font-bold text-xs text-slate-900 block">Emergency Paramedic / Staff</span>
-                <span className="text-[10px] text-slate-500">Scan QR & Register Unconscious Intake</span>
-              </div>
-            </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-700 transition" />
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleDemoSignIn(ROLES.HOSPITAL_ADMIN)}
-            className="w-full text-left p-3.5 rounded-2xl border border-slate-200 hover:border-sky-500 hover:bg-sky-50/40 transition flex items-center justify-between group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center">
-                <Building2 className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="font-bold text-xs text-slate-900 block">Hospital Administrator</span>
-                <span className="text-[10px] text-slate-500">Manage Bed Counts & Drug Inventory</span>
-              </div>
-            </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-sky-700 transition" />
-          </button>
-        </div>
-      </div>
-
-      {/* Standard Email / Password Form */}
-      <form onSubmit={handleFormSubmit} className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm space-y-4">
-        <h3 className="font-bold text-xs text-slate-700 uppercase tracking-wider">
-          Standard Sign In
-        </h3>
-
-        <div>
-          <label className="text-xs font-semibold text-slate-700 block mb-1">Email Address</label>
-          <div className="relative">
-            <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="user@example.com"
-              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="text-xs font-semibold text-slate-700 block mb-1">Password</label>
-          <div className="relative">
-            <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
-            />
-          </div>
-        </div>
-
-        {authMsg && (
-          <div className="text-xs text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>{authMsg}</span>
-          </div>
-        )}
-
-        <button
-          type="submit"
-          className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition shadow-sm"
-        >
-          Sign In
-        </button>
-      </form>
+      {hint && <p className="mt-1 text-xs text-slate-500">{hint}</p>}
     </div>
   );
 }
+ 
+export function AuthPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.from?.pathname || '/';
+ 
+  const [mode, setMode] = useState('signin'); // 'signin' | 'signup' | 'forgot'
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
+  const [showPw, setShowPw] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+ 
+  // Already signed in? Also handles the return trip from Google / email-confirm links.
+  useEffect(() => {
+    let active = true;
+    getCurrentUser().then((u) => active && u && navigate(redirectTo, { replace: true }));
+    const off = onAuthChange((u) => u && navigate(redirectTo, { replace: true }));
+    return () => {
+      active = false;
+      off();
+    };
+  }, [navigate, redirectTo]);
+ 
+  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+ 
+  const switchMode = (next) => {
+    setMode(next);
+    setError('');
+    setNotice('');
+    setForm((f) => ({ ...f, password: '', confirm: '' }));
+  };
+ 
+  const validate = () => {
+    if (mode === 'signup' && form.name.trim().length < 2) return 'Enter your full name.';
+    if (!EMAIL_RE.test(form.email.trim())) return 'Enter a valid email address.';
+    if (mode === 'forgot') return '';
+    if (mode === 'signup') {
+      if (form.password.length < 8) return 'Password must be at least 8 characters.';
+      if (!/[A-Za-z]/.test(form.password) || !/\d/.test(form.password))
+        return 'Password must include at least one letter and one number.';
+      if (form.password !== form.confirm) return 'Passwords do not match.';
+    } else if (!form.password) {
+      return 'Enter your password.';
+    }
+    return '';
+  };
+ 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setNotice('');
+    const problem = validate();
+    if (problem) return setError(problem);
+ 
+    setBusy(true);
+    try {
+      if (mode === 'signin') {
+        await signIn(form);
+        navigate(redirectTo, { replace: true });
+      } else if (mode === 'signup') {
+        const { needsEmailConfirmation } = await signUp(form);
+        if (needsEmailConfirmation) {
+          setNotice('Account created. Check your email and click the confirmation link, then sign in.');
+          setMode('signin');
+        } else {
+          navigate(redirectTo, { replace: true });
+        }
+      } else {
+        const res = await sendPasswordReset(form.email);
+        setNotice(
+          res.demo
+            ? 'Demo mode: no email is sent. Connect Supabase to enable password reset emails.'
+            : 'If an account exists for this email, a reset link is on its way.'
+        );
+      }
+    } catch (err) {
+      setError(err?.message || 'Something went wrong. Please try again.');
+    } finally {
+      setBusy(false);
+    }
+  };
+ 
+  const handleGoogle = async () => {
+    setError('');
+    setNotice('');
+    setBusy(true);
+    try {
+      await signInWithGoogle();
+      if (isDemoAuth) navigate(redirectTo, { replace: true });
+    } catch (err) {
+      setError(err?.message || 'Google sign-in failed. Please try again.');
+      setBusy(false);
+    }
+  };
+ 
+  const titles = {
+    signin: ['Sign in to LIFE-LINK', 'Access your emergency profile and hospital tools.'],
+    signup: ['Create your account', 'Set up your emergency profile before you need it.'],
+    forgot: ['Reset your password', "Enter your email and we'll send a reset link."],
+  };
+ 
+  return (
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-slate-50 px-4 py-10">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <div className="mb-6 flex flex-col items-center text-center">
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-red-600 text-white">
+            <HeartPulse className="h-6 w-6" />
+          </div>
+          <h1 className="text-2xl font-semibold text-slate-900">{titles[mode][0]}</h1>
+          <p className="mt-1 text-sm text-slate-600">{titles[mode][1]}</p>
+        </div>
+ 
+        {isDemoAuth && (
+          <p className="mb-4 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            Demo mode: accounts are stored only in this browser. Add your Supabase keys to use real accounts.
+          </p>
+        )}
+ 
+        <div role="alert" aria-live="polite">
+          {error && (
+            <p className="mb-4 flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" /> {error}
+            </p>
+          )}
+          {notice && (
+            <p className="mb-4 flex items-start gap-2 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-800">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" /> {notice}
+            </p>
+          )}
+        </div>
+ 
+        {mode !== 'forgot' && (
+          <>
+            <button
+              type="button"
+              onClick={handleGoogle}
+              disabled={busy}
+              className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-600/30 disabled:opacity-60"
+            >
+              <GoogleLogo />
+              Continue with Google
+            </button>
+            <div className="my-5 flex items-center gap-3 text-xs text-slate-400">
+              <span className="h-px flex-1 bg-slate-200" />
+              or use your email
+              <span className="h-px flex-1 bg-slate-200" />
+            </div>
+          </>
+        )}
+ 
+        <form onSubmit={handleSubmit} noValidate className="space-y-4">
+          {mode === 'signup' && (
+            <Field id="name" label="Full name" icon={User} value={form.name} onChange={set('name')} autoComplete="name" />
+          )}
+ 
+          <Field
+            id="email"
+            label="Email"
+            icon={Mail}
+            type="email"
+            value={form.email}
+            onChange={set('email')}
+            autoComplete="email"
+          />
+ 
+          {mode !== 'forgot' && (
+            <Field
+              id="password"
+              label="Password"
+              icon={Lock}
+              type={showPw ? 'text' : 'password'}
+              value={form.password}
+              onChange={set('password')}
+              autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+              hint={mode === 'signup' ? 'At least 8 characters, with a letter and a number.' : undefined}
+              right={
+                <button
+                  type="button"
+                  onClick={() => setShowPw((s) => !s)}
+                  aria-label={showPw ? 'Hide password' : 'Show password'}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              }
+            />
+          )}
+ 
+          {mode === 'signup' && (
+            <Field
+              id="confirm"
+              label="Confirm password"
+              icon={Lock}
+              type={showPw ? 'text' : 'password'}
+              value={form.confirm}
+              onChange={set('confirm')}
+              autoComplete="new-password"
+            />
+          )}
+ 
+          {mode === 'signin' && (
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={() => switchMode('forgot')}
+                className="text-sm font-medium text-red-700 hover:underline"
+              >
+                Forgot password?
+              </button>
+            </div>
+          )}
+ 
+          <button
+            type="submit"
+            disabled={busy}
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 font-medium text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600/40 disabled:opacity-60"
+          >
+            {busy && <Loader2 className="h-4 w-4 animate-spin" />}
+            {mode === 'signin' && 'Sign in'}
+            {mode === 'signup' && 'Create account'}
+            {mode === 'forgot' && 'Send reset link'}
+          </button>
+        </form>
+ 
+        <p className="mt-6 text-center text-sm text-slate-600">
+          {mode === 'signin' && (
+            <>
+              New to LIFE-LINK?{' '}
+              <button onClick={() => switchMode('signup')} className="font-medium text-red-700 hover:underline">
+                Create an account
+              </button>
+            </>
+          )}
+          {mode === 'signup' && (
+            <>
+              Already have an account?{' '}
+              <button onClick={() => switchMode('signin')} className="font-medium text-red-700 hover:underline">
+                Sign in
+              </button>
+            </>
+          )}
+          {mode === 'forgot' && (
+            <button onClick={() => switchMode('signin')} className="font-medium text-red-700 hover:underline">
+              Back to sign in
+            </button>
+          )}
+        </p>
+ 
+        <p className="mt-4 text-center text-xs text-slate-500">
+          In a medical emergency, call <strong>112</strong> or <strong>108</strong>. You do not need an account to find a hospital.{' '}
+          <Link to="/privacy-help" className="underline">Privacy</Link>
+        </p>
+      </div>
+    </div>
+  );
+}
+ 
