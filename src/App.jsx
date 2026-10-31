@@ -99,7 +99,7 @@ export default function App() {
               <Footer />
             </div>
           </BrowserRouter>
-        </OfflineProvider>
+        
         <main className="flex-1">
           <ErrorBoundary>
             <Routes> ... </Routes>
