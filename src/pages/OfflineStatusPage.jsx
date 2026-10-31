@@ -2,8 +2,7 @@
 import { useOffline } from '../contexts/OfflineContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { WifiOff, RefreshCw } from 'lucide-react';
-
-
+import { formatRelativeTime } from '../utils/time';
 
 export function OfflineBanner() {
   const { isOnline, simulateOffline, toggleSimulatedOffline, pendingQueueCount, lastSyncTime, triggerSync, syncStatus } = useOffline();
