@@ -30,63 +30,63 @@ export function LandingPage() {
       title: t('featVoiceTitle'),
       desc: t('featVoiceDesc'),
       link: '/voice-assistant',
-      cta: 'Try Voice Search',
+      cta: t('land_c1'),
     },
     {
       icon: <Search className="w-6 h-6 text-teal-600" />,
       title: t('featHospitalsTitle'),
       desc: t('featHospitalsDesc'),
       link: '/hospitals',
-      cta: 'Search Facilities',
+      cta: t('land_c2'),
     },
     {
       icon: <Bed className="w-6 h-6 text-teal-600" />,
       title: t('featBedsTitle'),
       desc: t('featBedsDesc'),
       link: '/hospitals',
-      cta: 'Check Live Beds',
+      cta: t('land_c3'),
     },
     {
       icon: <Pill className="w-6 h-6 text-teal-600" />,
       title: t('featMedicinesTitle'),
       desc: t('featMedicinesDesc'),
       link: '/hospitals',
-      cta: 'View Medicine Stock',
+      cta: t('land_c4'),
     },
     {
       icon: <MapPin className="w-6 h-6 text-teal-600" />,
       title: t('featMapsTitle'),
       desc: t('featMapsDesc'),
       link: '/map',
-      cta: 'Open Live Map',
+      cta: t('land_c5'),
     },
     {
       icon: <QrCode className="w-6 h-6 text-teal-600" />,
       title: t('featPatientIdTitle'),
       desc: t('featPatientIdDesc'),
       link: '/profile/qr',
-      cta: 'Generate QR Profile',
+      cta: t('land_c6'),
     },
     {
       icon: <Users className="w-6 h-6 text-teal-600" />,
       title: t('featFamilyTitle'),
       desc: t('featFamilyDesc'),
       link: '/patients/pat-emg-1042/family-contact',
-      cta: 'Test Family Alert',
+      cta: t('land_c7'),
     },
     {
       icon: <FileText className="w-6 h-6 text-teal-600" />,
       title: t('featTransferTitle'),
       desc: t('featTransferDesc'),
       link: '/patients/pat-emg-1042',
-      cta: 'View Patient Intake',
+      cta: t('land_c8'),
     },
     {
       icon: <WifiOff className="w-6 h-6 text-teal-600" />,
       title: t('featOfflineTitle'),
       desc: t('featOfflineDesc'),
       link: '/offline-status',
-      cta: 'Inspect Offline Store',
+      cta: t('land_c9'),
     },
   ];
 
@@ -145,10 +145,10 @@ export function LandingPage() {
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" /> English • ಕನ್ನಡ • हिन्दी
               </span>
               <span className="flex items-center gap-1.5">
-                <WifiOff className="w-4 h-4 text-amber-600" /> Offline IndexedDB Caching
+                <WifiOff className="w-4 h-4 text-amber-600" /> {t('land_t1')}
               </span>
               <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-teal-600" /> Zero PII on Public QR
+                <ShieldCheck className="w-4 h-4 text-teal-600" /> {t('land_t2')}
               </span>
             </div>
           </div>
@@ -159,13 +159,13 @@ export function LandingPage() {
       <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="text-xs font-extrabold uppercase tracking-widest text-teal-700 block mb-2">
-            Complete Healthcare Suite
+            {t('land_f0')}
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            Integrated Emergency Response Features
+            {t('land_f1')}
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-2">
-            Every feature connects directly to a live functional workflow tested in both online and zero-connectivity modes.
+            {t('land_f2')}
           </p>
         </div>
 
@@ -204,7 +204,7 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-extrabold uppercase tracking-widest text-teal-400 block mb-2">
-              Clinical Workflow
+              {t('land_w')}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               {t('howItWorksTitle')}
@@ -245,26 +245,26 @@ export function LandingPage() {
           {/* Why it matters */}
           <div className="bg-gradient-to-br from-teal-800 to-teal-950 text-white rounded-3xl p-8 sm:p-10 shadow-lg">
             <span className="text-xs font-extrabold uppercase tracking-widest text-teal-300 block mb-3">
-              Emergency Healthcare Realities
+              {t('land_r1')}
             </span>
             <h3 className="text-2xl font-black text-white mb-4 leading-tight">
-              Why Seconds Matter in Trauma and Acute Care
+              {t('land_r2')}
             </h3>
             <p className="text-xs sm:text-sm text-teal-100 leading-relaxed mb-6 font-normal">
-              In trauma medicine, the first 60 minutes after severe injury are known as the Golden Hour. Arriving at a facility that has no ICU bed or lacks critical anti-venom costs precious survival time. LIFE-LINK surfaces reported bed counts, timestamps, and medicine inventories beforehand.
+              {t('land_r3')}
             </p>
             <div className="space-y-3 text-xs text-teal-50">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-teal-300 shrink-0" />
-                <span>Prevents emergency ambulances from arriving at saturated casualties</span>
+                <span>{t('land_b1')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-teal-300 shrink-0" />
-                <span>Enables rapid identification of unconscious victims via non-sensitive QR tokens</span>
+                <span>{t('land_b2')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-teal-300 shrink-0" />
-                <span>Maintains clinical record continuity and handover notes during transfers</span>
+                <span>{t('land_b3')}</span>
               </div>
             </div>
           </div>
@@ -273,29 +273,29 @@ export function LandingPage() {
           <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-sm">
             <div className="flex items-center gap-2 text-teal-700 font-extrabold text-xs uppercase tracking-wider mb-3">
               <WifiOff className="w-4 h-4" />
-              <span>Offline-First Architecture</span>
+              <span>{t('land_o1')}</span>
             </div>
             <h3 className="text-2xl font-black text-slate-900 mb-4 leading-tight">
-              How Zero-Connectivity Resilience Works
+              {t('land_o2')}
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
-              When network signals drop in rural sectors or disaster zones, LIFE-LINK seamlessly switches to its local Progressive Web App cache and IndexedDB storage layer:
+              {t('land_o3')}
             </p>
 
             <div className="space-y-4 text-xs">
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80">
-                <h4 className="font-bold text-slate-900 mb-1">1. Service Worker & Shell Caching</h4>
-                <p className="text-slate-600">Core UI components, routing, and first aid guides load instantly from browser Cache API without an internet handshake.</p>
+                <h4 className="font-bold text-slate-900 mb-1">{t('land_s1t')}</h4>
+                <p className="text-slate-600">{t('land_s1')}</p>
               </div>
 
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80">
-                <h4 className="font-bold text-slate-900 mb-1">2. IndexedDB Local Storage</h4>
-                <p className="text-slate-600">Hospitals, emergency contacts, and active intake records are stored locally with clear last-updated timestamps.</p>
+                <h4 className="font-bold text-slate-900 mb-1">{t('land_s2t')}</h4>
+                <p className="text-slate-600">{t('land_s2')}</p>
               </div>
 
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80">
-                <h4 className="font-bold text-slate-900 mb-1">3. Offline Queue & Conflict-Free Sync</h4>
-                <p className="text-slate-600">Staff actions taken offline are queued in IndexedDB and replayed to remote backends as soon as connectivity restores.</p>
+                <h4 className="font-bold text-slate-900 mb-1">{t('land_s3t')}</h4>
+                <p className="text-slate-600">{t('land_s3')}</p>
               </div>
             </div>
           </div>
@@ -307,7 +307,7 @@ export function LandingPage() {
         <div className="bg-rose-50 border border-rose-200 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="space-y-2">
             <span className="text-rose-700 font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
-              <HeartPulse className="w-4 h-4 text-rose-600" /> Official Emergency Advisory
+              <HeartPulse className="w-4 h-4 text-rose-600" /> {t('land_adv')}
             </span>
             <p className="text-xs sm:text-sm text-rose-950 font-medium leading-relaxed max-w-2xl">
               {t('emergencyDisclaimer')}
@@ -318,7 +318,7 @@ export function LandingPage() {
             to="/emergency"
             className="shrink-0 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs px-5 py-3 rounded-2xl transition shadow-md shadow-rose-600/30"
           >
-            Open Emergency Dialer (112 / 108) →
+            {t('land_dial')}
           </Link>
         </div>
       </section>

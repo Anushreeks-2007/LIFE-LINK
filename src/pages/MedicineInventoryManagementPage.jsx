@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { getHospitalById, updateHospitalMedicines } from '../services/hospitalService';
 import { useAuth } from '../contexts/AuthContext';
@@ -56,7 +57,7 @@ export function MedicineInventoryManagementPage() {
         navigate('/admin');
       }, 1500);
     } catch (err) {
-      alert('Failed to update medicines: ' + err.message);
+      alert(t('med_fail') + err.message);
     } finally {
       setIsSaving(false);
     }
@@ -66,7 +67,7 @@ export function MedicineInventoryManagementPage() {
     return (
       <div className="py-24 text-center text-xs font-semibold text-slate-400">
         <RefreshCw className="w-8 h-8 animate-spin mx-auto text-teal-600 mb-2" />
-        <p>Loading Medicine Inventory...</p>
+        <p>{t('med_loading')}</p>
       </div>
     );
   }
@@ -77,26 +78,26 @@ export function MedicineInventoryManagementPage() {
         to="/admin"
         className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 transition"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Admin Overview
+        <ArrowLeft className="w-4 h-4" /> {t('adm_back')}
       </Link>
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
-            Emergency Supply Chain
+            {t('med_badge')}
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
-            Essential Medicine & Blood Stock
+            {t('med_title')}
           </h1>
           <p className="text-xs text-slate-500">
-            {hospital?.name} • Keep life-saving anti-venom, O- blood, and critical meds updated.
+            {hospital?.name} {t('med_sub')}
           </p>
         </div>
 
         <div className="text-right">
-          <span className="text-xs font-bold text-slate-400 block">Status</span>
+          <span className="text-xs font-bold text-slate-400 block">{t('common_status')}</span>
           <span className={`text-xs font-extrabold ${isOnline ? 'text-emerald-600' : 'text-amber-600'}`}>
-            {isOnline ? 'Broadcasting Online' : 'Queuing Offline'}
+            {isOnline ? t('common_broadcastOnline') : t('common_queueOffline')}
           </span>
         </div>
       </div>
@@ -104,7 +105,7 @@ export function MedicineInventoryManagementPage() {
       {saveSuccess && (
         <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs rounded-2xl flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          <span>Medicine inventory updated and broadcasted!</span>
+          <span>{t('med_ok')}</span>
         </div>
       )}
 
@@ -125,18 +126,18 @@ export function MedicineInventoryManagementPage() {
                     <span className="font-extrabold text-sm text-slate-900">{m.medicine_name}</span>
                     {isLow && (
                       <span className="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded">
-                        Low Stock Alert
+                        {t('med_low')}
                       </span>
                     )}
                   </div>
                   <span className="text-[11px] text-slate-500">
-                    Unit: {m.unit} • Last updated: {new Date(m.reported_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {t('med_unit')} {m.unit} {t('med_lastUpd')} {new Date(m.reported_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <label className="text-[10px] font-bold text-slate-500 uppercase block">
-                    Available Stock ({m.unit}):
+                    {t('med_stock').replace('{unit}', m.unit)}
                   </label>
                   <input
                     type="number"
@@ -153,7 +154,7 @@ export function MedicineInventoryManagementPage() {
 
         <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
           <span className="text-[11px] text-slate-500">
-            Enables emergency ambulances to route patients requiring rare treatments.
+            {t('med_foot')}
           </span>
 
           <button
@@ -162,7 +163,7 @@ export function MedicineInventoryManagementPage() {
             className="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-sm transition"
           >
             <Save className="w-4 h-4" />
-            <span>{isSaving ? 'Updating...' : 'Save & Publish Inventory'}</span>
+            <span>{isSaving ? t('med_updating') : t('med_save')}</span>
           </button>
         </div>
       </form>

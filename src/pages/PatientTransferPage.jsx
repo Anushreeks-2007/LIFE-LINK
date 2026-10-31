@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getEmergencyPatient, recordPatientTransfer } from '../services/emergencyPatientService';
 import { dbGetHospitals } from '../services/db';
@@ -70,7 +71,7 @@ export function PatientTransferPage() {
 
       navigate(`/patients/${patient.id}`);
     } catch (err) {
-      alert('Transfer record failed: ' + err.message);
+      alert(t('xfer_fail') + err.message);
       setIsSubmitting(false);
     }
   };
@@ -79,7 +80,7 @@ export function PatientTransferPage() {
     return (
       <div className="py-24 text-center text-xs font-semibold text-slate-400">
         <RefreshCw className="w-8 h-8 animate-spin mx-auto text-teal-600 mb-2" />
-        <p>Loading Transfer Dispatch Form...</p>
+        <p>{t('xfer_loading')}</p>
       </div>
     );
   }
@@ -87,8 +88,8 @@ export function PatientTransferPage() {
   if (!patient) {
     return (
       <div className="max-w-md mx-auto py-16 text-center space-y-4">
-        <p className="text-xs text-rose-600">Patient not found.</p>
-        <Link to="/staff/scan" className="text-xs font-bold text-teal-700 underline">Return</Link>
+        <p className="text-xs text-rose-600">{t('pat_notFoundShort')}</p>
+        <Link to="/staff/scan" className="text-xs font-bold text-teal-700 underline">{t('common_return')}</Link>
       </div>
     );
   }
@@ -102,24 +103,24 @@ export function PatientTransferPage() {
         to={`/patients/${patient.id}`}
         className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 transition"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Patient Record
+        <ArrowLeft className="w-4 h-4" /> {t('pat_backRecord')}
       </Link>
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
-            Medical Record Continuity
+            {t('xfer_badge')}
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
-            Initiate Inter-Hospital Patient Transfer
+            {t('xfer_title')}
           </h1>
           <p className="text-xs text-slate-500">
-            Dispatches patient transfer and maintains continuous clinical handover notes across facilities.
+            {t('xfer_sub')}
           </p>
         </div>
 
         <div className="bg-slate-900 text-white p-3 rounded-2xl shrink-0">
-          <span className="text-[10px] text-teal-300 font-bold uppercase block tracking-wider">Patient</span>
+          <span className="text-[10px] text-teal-300 font-bold uppercase block tracking-wider">{t('pat_label')}</span>
           <span className="font-mono font-black text-sm text-emerald-400">{patient.temporary_patient_id}</span>
         </div>
       </div>
@@ -128,9 +129,9 @@ export function PatientTransferPage() {
         <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 text-xs text-amber-900 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div>
-            <h4 className="font-bold text-sm">Offline Transfer Dispatch</h4>
+            <h4 className="font-bold text-sm">{t('xfer_offTitle')}</h4>
             <p className="mt-0.5">
-              The transfer entry and handover observations will be stored locally and synced when connection returns.
+              {t('xfer_offText')}
             </p>
           </div>
         </div>
@@ -142,21 +143,21 @@ export function PatientTransferPage() {
         <div>
           <h3 className="font-extrabold text-sm text-slate-900 mb-4 flex items-center gap-2">
             <Building2 className="w-4 h-4 text-teal-600" />
-            1. Source and Destination Facilities
+            {t('xfer_s1')}
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
-              <span className="text-[10px] text-slate-400 font-bold uppercase block">Transfer Origin (Source)</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">{t('xfer_origin')}</span>
               <span className="font-extrabold text-slate-900 text-sm block mt-1">
-                {currentHospital?.name || 'Current Hospital'}
+                {currentHospital?.name || t('xfer_curHosp')}
               </span>
               <span className="text-[11px] text-slate-500">{currentHospital?.address}</span>
             </div>
 
             <div>
               <label className="font-bold text-slate-700 block mb-1">
-                Receiving Destination Hospital
+                {t('xfer_dest')}
               </label>
               <select
                 value={formData.destinationHospitalId}
@@ -165,13 +166,13 @@ export function PatientTransferPage() {
               >
                 {hospitals.map((h) => (
                   <option key={h.id} value={h.id} disabled={h.id === patient.current_hospital_id}>
-                    {h.name} {h.id === patient.current_hospital_id ? '(Current Facility)' : ''}
+                    {h.name} {h.id === patient.current_hospital_id ? t('xfer_curFac') : ''}
                   </option>
                 ))}
               </select>
               {targetHospital && (
                 <p className="text-[11px] text-teal-700 font-medium mt-1">
-                  Reported Availability: {targetHospital.totalAvailableBeds || 0} Beds • Emergency 24/7 Active
+                  {t('xfer_reportedAvail').replace('{n}', targetHospital.totalAvailableBeds || 0)}
                 </p>
               )}
             </div>
@@ -182,34 +183,34 @@ export function PatientTransferPage() {
         <div className="pt-4 border-t border-slate-100">
           <h3 className="font-extrabold text-sm text-slate-900 mb-4 flex items-center gap-2">
             <Ambulance className="w-4 h-4 text-teal-600" />
-            2. Transfer Reason & Transport Handover Notes
+            {t('xfer_s2')}
           </h3>
 
           <div className="space-y-4 text-xs">
             <div>
               <label className="font-bold text-slate-700 block mb-1">
-                Clinical Reason for Inter-Hospital Transfer
+                {t('xfer_reason')}
               </label>
               <input
                 type="text"
                 required
                 value={formData.reason}
                 onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-                placeholder="e.g. Higher-level neurosurgical care required"
+                placeholder={t('xfer_phReason')}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
               />
             </div>
 
             <div>
               <label className="font-bold text-slate-700 block mb-1">
-                Clinical Handover Notes & Transit Vitals
+                {t('xfer_notes')}
               </label>
               <textarea
                 rows={4}
                 required
                 value={formData.handoverNotes}
                 onChange={(e) => setFormData({ ...formData, handoverNotes: e.target.value })}
-                placeholder="Detail vitals, active infusions, airway management, and doctor recommendations."
+                placeholder={t('xfer_phNotes')}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
               />
             </div>
@@ -217,7 +218,7 @@ export function PatientTransferPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="font-bold text-slate-700 block mb-1">
-                  Ambulance / Transport Unit
+                  {t('xfer_amb')}
                 </label>
                 <input
                   type="text"
@@ -230,7 +231,7 @@ export function PatientTransferPage() {
 
               <div>
                 <label className="font-bold text-slate-700 block mb-1">
-                  Authorizing Officer / Attending CMO
+                  {t('xfer_auth')}
                 </label>
                 <input
                   type="text"
@@ -247,7 +248,7 @@ export function PatientTransferPage() {
         {/* Submit */}
         <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
           <span className="text-[11px] text-slate-500">
-            Records transfer into clinical audit history and updates facility assignment.
+            {t('xfer_foot')}
           </span>
 
           <button
@@ -256,7 +257,7 @@ export function PatientTransferPage() {
             className="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-sm transition"
           >
             <Save className="w-4 h-4" />
-            <span>{isSubmitting ? 'Recording Transfer...' : 'Confirm Hospital Transfer'}</span>
+            <span>{isSubmitting ? t('xfer_recording') : t('xfer_confirm')}</span>
           </button>
         </div>
       </form>

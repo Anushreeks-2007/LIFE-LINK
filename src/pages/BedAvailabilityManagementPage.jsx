@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { getHospitalById, updateHospitalBeds } from '../services/hospitalService';
 import { useAuth } from '../contexts/AuthContext';
@@ -51,7 +52,7 @@ export function BedAvailabilityManagementPage() {
     // Validation: Available beds cannot exceed Total beds
     for (const b of beds) {
       if (b.reported_available_beds > b.total_beds) {
-        setValidationError(`Invalid bed count for "${b.bed_type}": Available beds (${b.reported_available_beds}) cannot exceed total capacity (${b.total_beds}).`);
+        setValidationError(t('bed_invalid').replace('{type}', b.bed_type).replace('{avail}', b.reported_available_beds).replace('{total}', b.total_beds));
         return;
       }
     }
@@ -67,7 +68,7 @@ export function BedAvailabilityManagementPage() {
         navigate('/admin');
       }, 1500);
     } catch (err) {
-      alert('Failed to update bed counts: ' + err.message);
+      alert(t('bed_failed') + err.message);
     } finally {
       setIsSaving(false);
     }
@@ -77,7 +78,7 @@ export function BedAvailabilityManagementPage() {
     return (
       <div className="py-24 text-center text-xs font-semibold text-slate-400">
         <RefreshCw className="w-8 h-8 animate-spin mx-auto text-teal-600 mb-2" />
-        <p>Loading Bed Inventory...</p>
+        <p>{t('bed_loading')}</p>
       </div>
     );
   }
@@ -88,26 +89,26 @@ export function BedAvailabilityManagementPage() {
         to="/admin"
         className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 transition"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Admin Overview
+        <ArrowLeft className="w-4 h-4" /> {t('adm_back')}
       </Link>
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-200">
-            Live Bed Reporting
+            {t('bed_badge')}
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
-            Update Bed Availability
+            {t('bed_title')}
           </h1>
           <p className="text-xs text-slate-500">
-            {hospital?.name} • Accurate counts prevent emergency diversions and save lives.
+            {hospital?.name} {t('bed_sub')}
           </p>
         </div>
 
         <div className="text-right">
-          <span className="text-xs font-bold text-slate-400 block">Status</span>
+          <span className="text-xs font-bold text-slate-400 block">{t('common_status')}</span>
           <span className={`text-xs font-extrabold ${isOnline ? 'text-emerald-600' : 'text-amber-600'}`}>
-            {isOnline ? 'Broadcasting Online' : 'Queuing Offline'}
+            {isOnline ? t('common_broadcastOnline') : t('common_queueOffline')}
           </span>
         </div>
       </div>
@@ -122,7 +123,7 @@ export function BedAvailabilityManagementPage() {
       {saveSuccess && (
         <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs rounded-2xl flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>Bed availability broadcasted successfully!</span>
+          <span>{t('bed_success')}</span>
         </div>
       )}
 
@@ -137,14 +138,14 @@ export function BedAvailabilityManagementPage() {
               <div>
                 <span className="font-extrabold text-sm text-slate-900 block">{b.bed_type}</span>
                 <span className="text-[11px] text-slate-500">
-                  Last reported: {new Date(b.reported_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {t('common_lastReported')} {new Date(b.reported_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
 
               <div className="flex items-center gap-3">
                 <div>
                   <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">
-                    Total Licensed
+                    {t('bed_totalLic')}
                   </label>
                   <input
                     type="number"
@@ -157,7 +158,7 @@ export function BedAvailabilityManagementPage() {
 
                 <div>
                   <label className="text-[10px] font-bold text-emerald-700 uppercase block mb-1">
-                    Available Now
+                    {t('bed_availNow')}
                   </label>
                   <input
                     type="number"
@@ -174,7 +175,7 @@ export function BedAvailabilityManagementPage() {
 
         <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
           <span className="text-[11px] text-slate-500">
-            Updating resets the freshness timestamp to {new Date().toLocaleTimeString()}.
+            {t('bed_fresh')} {new Date().toLocaleTimeString()}.
           </span>
 
           <button
@@ -183,7 +184,7 @@ export function BedAvailabilityManagementPage() {
             className="inline-flex items-center gap-2 bg-sky-700 hover:bg-sky-800 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-sm transition"
           >
             <Save className="w-4 h-4" />
-            <span>{isSaving ? 'Broadcasting...' : 'Save & Broadcast Availability'}</span>
+            <span>{isSaving ? t('bed_broadcasting') : t('bed_saveBtn')}</span>
           </button>
         </div>
       </form>

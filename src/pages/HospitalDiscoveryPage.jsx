@@ -62,7 +62,7 @@ export function HospitalDiscoveryPage() {
       setUserLocation(pos);
     } catch (err) {
       console.warn('GPS location request failed:', err);
-      setLocationError('Could not obtain current GPS position. Using Bangalore city center default.');
+      setLocationError(t('hdisc_gps'));
       setUserLocation(DEFAULT_USER_COORDS);
     } finally {
       setIsLocating(false);
@@ -86,11 +86,11 @@ export function HospitalDiscoveryPage() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
-              Live Hospital Directory
+              {t('hdisc_badge')}
             </span>
             {!isOnline && (
               <span className="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
-                Cached Local Data
+                {t('hdisc_cached')}
               </span>
             )}
           </div>
@@ -98,7 +98,7 @@ export function HospitalDiscoveryPage() {
             {t('navHospitals')}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500">
-            Find nearby emergency centers, verified ICU beds, and essential medicine stocks.
+            {t('hdisc_sub')}
           </p>
         </div>
 
@@ -109,7 +109,7 @@ export function HospitalDiscoveryPage() {
             className="inline-flex items-center gap-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition"
           >
             <Mic className="w-4 h-4 text-teal-600" />
-            <span>Voice Search</span>
+            <span>{t('hdisc_voice')}</span>
           </Link>
 
           <Link
@@ -152,14 +152,14 @@ export function HospitalDiscoveryPage() {
       {/* Hospital Results Count */}
       <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-1">
         <span>
-          Showing <strong>{hospitals.length}</strong> medical facilities matching criteria
+          {t('hdisc_showing')} <strong>{hospitals.length}</strong> {t('hdisc_matching')}
         </span>
         <button
           type="button"
           onClick={loadData}
           className="hover:text-slate-800 inline-flex items-center gap-1"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} /> Refresh
+          <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} /> {t('hdisc_refresh')}
         </button>
       </div>
 
@@ -183,7 +183,7 @@ export function HospitalDiscoveryPage() {
           <div>
             <h3 className="font-bold text-slate-900 text-base">{t('noHospitalsFound')}</h3>
             <p className="text-xs text-slate-500 mt-1">
-              Try broadening your search query or unchecking one of the availability filters.
+              {t('hdisc_try')}
             </p>
           </div>
           <button
@@ -191,7 +191,7 @@ export function HospitalDiscoveryPage() {
             onClick={handleResetFilters}
             className="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition"
           >
-            Reset All Filters
+            {t('hdisc_reset')}
           </button>
         </div>
       )}

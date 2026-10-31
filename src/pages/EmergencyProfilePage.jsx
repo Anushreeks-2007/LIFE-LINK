@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { dbGetProfileById, dbSaveProfile } from '../services/db';
@@ -63,13 +64,13 @@ export function EmergencyProfilePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
-            Emergency Preparedness
+            {t('prof_badge')}
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
-            Personal Emergency Medical Profile
+            {t('prof_title')}
           </h1>
           <p className="text-xs text-slate-500">
-            Information stored here is linked to your secure emergency QR card to protect you in an unconscious emergency.
+            {t('prof_sub')}
           </p>
         </div>
 
@@ -78,7 +79,7 @@ export function EmergencyProfilePage() {
           className="inline-flex items-center gap-1.5 bg-teal-700 hover:bg-teal-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition"
         >
           <QrCode className="w-4 h-4" />
-          <span>View My QR Card</span>
+          <span>{t('prof_viewQr')}</span>
         </Link>
       </div>
 
@@ -86,9 +87,9 @@ export function EmergencyProfilePage() {
       <div className="bg-teal-50 border border-teal-200 rounded-2xl p-4 text-xs text-teal-900 flex items-start gap-3">
         <ShieldCheck className="w-5 h-5 text-teal-700 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <h4 className="font-bold text-sm">Privacy & Access Protection</h4>
+          <h4 className="font-bold text-sm">{t('prof_privTitle')}</h4>
           <p className="text-teal-800">
-            Your full phone number and home address are NEVER stored openly inside the QR code. Only an unpredictable, revocable reference token is encoded. Authorized healthcare personnel can only retrieve critical triage notes after scanning.
+            {t('prof_privText')}
           </p>
         </div>
       </div>
@@ -99,11 +100,11 @@ export function EmergencyProfilePage() {
         <div>
           <h3 className="font-extrabold text-sm text-slate-900 mb-4 flex items-center gap-2">
             <User className="w-4 h-4 text-teal-600" />
-            1. Personal Demographics
+            {t('prof_s1')}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             <div className="sm:col-span-2">
-              <label className="font-bold text-slate-700 block mb-1">Full Legal Name</label>
+              <label className="font-bold text-slate-700 block mb-1">{t('prof_name')}</label>
               <input
                 type="text"
                 required
@@ -114,7 +115,7 @@ export function EmergencyProfilePage() {
             </div>
 
             <div>
-              <label className="font-bold text-slate-700 block mb-1">Blood Group</label>
+              <label className="font-bold text-slate-700 block mb-1">{t('prof_blood')}</label>
               <select
                 value={profile.blood_group}
                 onChange={(e) => setProfile({ ...profile, blood_group: e.target.value })}
@@ -125,7 +126,7 @@ export function EmergencyProfilePage() {
                 <option value="B+">B+</option>
                 <option value="B-">B-</option>
                 <option value="O+">O+</option>
-                <option value="O-">O- (Universal Red Cells)</option>
+                <option value="O-">{t('prof_oneg')}</option>
                 <option value="AB+">AB+</option>
                 <option value="AB-">AB-</option>
               </select>
@@ -137,35 +138,35 @@ export function EmergencyProfilePage() {
         <div className="pt-4 border-t border-slate-100">
           <h3 className="font-extrabold text-sm text-slate-900 mb-4 flex items-center gap-2">
             <Phone className="w-4 h-4 text-teal-600" />
-            2. Primary Emergency Family Contact
+            {t('prof_s2')}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             <div>
-              <label className="font-bold text-slate-700 block mb-1">Contact Name</label>
+              <label className="font-bold text-slate-700 block mb-1">{t('prof_cName')}</label>
               <input
                 type="text"
                 required
                 value={profile.emergency_contact_name}
                 onChange={(e) => setProfile({ ...profile, emergency_contact_name: e.target.value })}
-                placeholder="e.g. Anjali Sharma"
+                placeholder={t('prof_phName')}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
               />
             </div>
 
             <div>
-              <label className="font-bold text-slate-700 block mb-1">Relationship</label>
+              <label className="font-bold text-slate-700 block mb-1">{t('prof_rel')}</label>
               <input
                 type="text"
                 required
                 value={profile.emergency_contact_relationship}
                 onChange={(e) => setProfile({ ...profile, emergency_contact_relationship: e.target.value })}
-                placeholder="Sister, Spouse, Parent"
+                placeholder={t('prof_phRel')}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
               />
             </div>
 
             <div>
-              <label className="font-bold text-slate-700 block mb-1">Mobile Phone (With Country Code)</label>
+              <label className="font-bold text-slate-700 block mb-1">{t('prof_phone')}</label>
               <input
                 type="tel"
                 required
@@ -182,31 +183,31 @@ export function EmergencyProfilePage() {
         <div className="pt-4 border-t border-slate-100">
           <h3 className="font-extrabold text-sm text-slate-900 mb-4 flex items-center gap-2">
             <Heart className="w-4 h-4 text-rose-600" />
-            3. Critical Medical Alert & Allergies
+            {t('prof_s3')}
           </h3>
           <div className="space-y-4 text-xs">
             <div>
               <label className="font-bold text-slate-700 block mb-1">
-                Known Severe Drug or Food Allergies
+                {t('prof_allergy')}
               </label>
               <input
                 type="text"
                 value={profile.allergies}
                 onChange={(e) => setProfile({ ...profile, allergies: e.target.value })}
-                placeholder="e.g. Severe Penicillin anaphylaxis, Sulfa drugs, Peanuts"
+                placeholder={t('prof_phAllergy')}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
               />
             </div>
 
             <div>
               <label className="font-bold text-slate-700 block mb-1">
-                Relevant Medical History / Chronic Conditions
+                {t('prof_history')}
               </label>
               <textarea
                 rows={3}
                 value={profile.relevant_medical_notes}
                 onChange={(e) => setProfile({ ...profile, relevant_medical_notes: e.target.value })}
-                placeholder="e.g. Type 1 Diabetes on daily insulin, Asthma, Epilepsy, Pacemaker implant"
+                placeholder={t('prof_phHistory')}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
               />
             </div>
@@ -220,7 +221,7 @@ export function EmergencyProfilePage() {
                 className="w-4 h-4 rounded text-teal-600 focus:ring-teal-500"
               />
               <label htmlFor="organDonor" className="font-semibold text-slate-800">
-                I voluntarily declare my pledge as an Organ & Tissue Donor in emergency scenarios.
+                {t('prof_donor')}
               </label>
             </div>
           </div>
@@ -229,7 +230,7 @@ export function EmergencyProfilePage() {
         {saveSuccess && (
           <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs rounded-xl flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>Emergency Profile and QR token updated successfully.</span>
+            <span>{t('prof_saved')}</span>
           </div>
         )}
 
@@ -238,14 +239,14 @@ export function EmergencyProfilePage() {
             type="submit"
             className="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-sm transition"
           >
-            <Save className="w-4 h-4" /> Save Profile
+            <Save className="w-4 h-4" /> {t('prof_save')}
           </button>
 
           <Link
             to="/profile/qr"
             className="text-xs font-bold text-teal-700 hover:underline flex items-center gap-1"
           >
-            Proceed to QR Code Card <ArrowRight className="w-3.5 h-3.5" />
+            {t('prof_goQr')} <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       </form>

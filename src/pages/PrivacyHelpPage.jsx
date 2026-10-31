@@ -9,13 +9,13 @@ export function PrivacyHelpPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <div>
         <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
-          Governance & Security
+          {t('priv_badge')}
         </span>
         <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
           {t('navPrivacy')}
         </h1>
         <p className="text-xs text-slate-500">
-          Architecture principles, clinical privacy safeguards, and emergency regulatory guidelines.
+          {t('priv_sub')}
         </p>
       </div>
 
@@ -23,10 +23,10 @@ export function PrivacyHelpPage() {
       <div className="bg-rose-50 border border-rose-200 rounded-3xl p-6 sm:p-8 space-y-3">
         <div className="flex items-center gap-2 text-rose-800 font-extrabold text-sm">
           <HeartPulse className="w-5 h-5 text-rose-600" />
-          <span>Official Emergency Legal Disclaimer</span>
+          <span>{t('priv_discTitle')}</span>
         </div>
         <p className="text-xs sm:text-sm text-rose-950 font-medium leading-relaxed">
-          LIFE-LINK is a clinical navigation and medical record continuity tool. It complements rather than replaces official emergency services (112, 108) or direct physician consultation. Bed availability and medicine inventories are reported by hospital administrators and are subject to immediate clinical priority surges. If someone is experiencing a life-threatening crisis, call emergency ambulance services without delay.
+          {t('priv_disc')}
         </p>
       </div>
 
@@ -34,47 +34,47 @@ export function PrivacyHelpPage() {
       <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-6">
         <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
           <ShieldCheck className="w-5 h-5 text-teal-600" />
-          Healthcare Data Privacy Architecture
+          {t('priv_arch')}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
             <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
               <EyeOff className="w-4 h-4 text-teal-600" />
-              1. Non-Sensitive QR Tokens
+              {t('priv_1t')}
             </h3>
             <p className="text-slate-600 leading-relaxed font-normal">
-              Public QR codes never contain plain-text medical histories, full national IDs, or raw contact numbers. The code stores an unguessable token hash that only authenticated medical staff can resolve during clinical intake.
+              {t('priv_1')}
             </p>
           </div>
 
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
             <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
               <Lock className="w-4 h-4 text-teal-600" />
-              2. Revocable Profile Access
+              {t('priv_2t')}
             </h3>
             <p className="text-slate-600 leading-relaxed font-normal">
-              If a wallet card or printed sticker is lost or compromised, patients can revoke the active token with one click from their profile settings, rendering physical cards completely inert.
+              {t('priv_2')}
             </p>
           </div>
 
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
             <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
               <FileText className="w-4 h-4 text-teal-600" />
-              3. Immutable Clinical Audit Trails
+              {t('priv_3t')}
             </h3>
             <p className="text-slate-600 leading-relaxed font-normal">
-              All transfers, unidentified patient admissions, and identity linking actions log the operator's badge ID, hospital location, and verifiable timestamp to maintain clinical accountability.
+              {t('priv_3')}
             </p>
           </div>
 
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
             <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-600" />
-              4. Least-Privilege Role Authorization
+              {t('priv_4t')}
             </h3>
             <p className="text-slate-600 leading-relaxed font-normal">
-              Public citizens can only modify their own emergency profile. Only verified healthcare staff can register unidentified patients or dispatch transfers. Hospital admins are restricted to their assigned facility.
+              {t('priv_4')}
             </p>
           </div>
         </div>

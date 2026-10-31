@@ -38,12 +38,12 @@ export function EmergencyAssistancePage() {
             <HeartPulse className="w-6 h-6 stroke-[2.5]" />
           </div>
           <span className="text-xs font-black uppercase tracking-widest bg-rose-700/80 px-3 py-1 rounded-full">
-            Immediate Emergency Response
+            {t('emg_badge')}
           </span>
         </div>
 
         <h1 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
-          Facing a Critical Medical Emergency?
+          {t('emg_title')}
         </h1>
 
         <p className="text-xs sm:text-sm text-rose-100 max-w-2xl leading-relaxed">
@@ -59,8 +59,8 @@ export function EmergencyAssistancePage() {
             <div className="flex items-center gap-3">
               <Ambulance className="w-6 h-6 text-rose-600" />
               <div>
-                <span className="text-[11px] font-bold text-slate-500 uppercase block">Ambulance</span>
-                <span className="text-xl font-black text-rose-600">Dial 108</span>
+                <span className="text-[11px] font-bold text-slate-500 uppercase block">{t('emg_ambulance')}</span>
+                <span className="text-xl font-black text-rose-600">{t('emg_dial108')}</span>
               </div>
             </div>
             <PhoneCall className="w-5 h-5 text-rose-600" />
@@ -73,8 +73,8 @@ export function EmergencyAssistancePage() {
             <div className="flex items-center gap-3">
               <ShieldAlert className="w-6 h-6 text-rose-600" />
               <div>
-                <span className="text-[11px] font-bold text-slate-500 uppercase block">All Emergencies</span>
-                <span className="text-xl font-black text-rose-600">Dial 112</span>
+                <span className="text-[11px] font-bold text-slate-500 uppercase block">{t('emg_all')}</span>
+                <span className="text-xl font-black text-rose-600">{t('emg_dial112')}</span>
               </div>
             </div>
             <PhoneCall className="w-5 h-5 text-rose-600" />
@@ -87,8 +87,8 @@ export function EmergencyAssistancePage() {
             <div className="flex items-center gap-3">
               <PhoneForwarded className="w-6 h-6 text-rose-600" />
               <div>
-                <span className="text-[11px] font-bold text-slate-500 uppercase block">Disaster Relief</span>
-                <span className="text-xl font-black text-rose-600">Dial 1077</span>
+                <span className="text-[11px] font-bold text-slate-500 uppercase block">{t('emg_disaster')}</span>
+                <span className="text-xl font-black text-rose-600">{t('emg_dial1077')}</span>
               </div>
             </div>
             <PhoneCall className="w-5 h-5 text-rose-600" />
@@ -101,7 +101,7 @@ export function EmergencyAssistancePage() {
         <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 text-xs text-amber-900 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div>
-            <h4 className="font-bold text-sm">Offline Mode Active</h4>
+            <h4 className="font-bold text-sm">{t('emg_offline')}</h4>
             <p className="mt-0.5">
               {t('offlineNotice')}
             </p>
@@ -115,11 +115,11 @@ export function EmergencyAssistancePage() {
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-5 h-5 text-rose-600" />
             <h2 className="text-lg font-black text-slate-900">
-              Nearest 24/7 Emergency Casualty Facilities
+              {t('emg_nearest')}
             </h2>
           </div>
           <Link to="/hospitals?emergency=1" className="text-xs font-bold text-teal-700 hover:underline">
-            View All Emergency Facilities →
+            {t('emg_viewAll')}
           </Link>
         </div>
 

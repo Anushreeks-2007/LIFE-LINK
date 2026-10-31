@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   getEmergencyPatient,
@@ -82,7 +83,7 @@ export function EmergencyPatientDetailsPage() {
         setIsLinkModalOpen(false);
       }, 1500);
     } catch (err) {
-      alert('Linking failed: ' + err.message);
+      alert(t('pat_linkFail') + err.message);
     } finally {
       setIsLinking(false);
     }
@@ -92,7 +93,7 @@ export function EmergencyPatientDetailsPage() {
     return (
       <div className="py-24 text-center text-xs font-semibold text-slate-400">
         <RefreshCw className="w-8 h-8 animate-spin mx-auto text-teal-600 mb-2" />
-        <p>Retrieving Clinical Emergency Record...</p>
+        <p>{t('pat_loading')}</p>
       </div>
     );
   }
@@ -101,10 +102,10 @@ export function EmergencyPatientDetailsPage() {
     return (
       <div className="max-w-2xl mx-auto py-16 text-center space-y-4">
         <AlertTriangle className="w-12 h-12 text-slate-300 mx-auto" />
-        <h2 className="text-xl font-bold text-slate-800">Patient Record Not Found</h2>
-        <p className="text-xs text-slate-500">No emergency intake matches ID: {id}</p>
+        <h2 className="text-xl font-bold text-slate-800">{t('pat_nf')}</h2>
+        <p className="text-xs text-slate-500">{t('pat_noMatch')} {id}</p>
         <Link to="/staff/scan" className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-700 hover:underline">
-          <ArrowLeft className="w-4 h-4" /> Return to Scanner Terminal
+          <ArrowLeft className="w-4 h-4" /> {t('pat_retScan')}
         </Link>
       </div>
     );
@@ -121,11 +122,11 @@ export function EmergencyPatientDetailsPage() {
           onClick={() => navigate(-1)}
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 transition"
         >
-          <ArrowLeft className="w-4 h-4" /> Back
+          <ArrowLeft className="w-4 h-4" /> {t('back')}
         </button>
 
         <span className="text-xs font-bold text-slate-400">
-          Record ID: <span className="font-mono text-slate-600">{patient.id}</span>
+          {t('pat_recId')} <span className="font-mono text-slate-600">{patient.id}</span>
         </span>
       </div>
 
@@ -141,12 +142,12 @@ export function EmergencyPatientDetailsPage() {
               {patient.identification_status === 'verified_linked' ? (
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-300">
                   <CheckCircle2 className="w-4 h-4 text-emerald-700" />
-                  Verified Identity: {patient.linked_profile_name || patient.linked_profile?.name}
+                  {t('pat_verified')} {patient.linked_profile_name || patient.linked_profile?.name}
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
                   <Clock className="w-4 h-4 text-amber-700" />
-                  Identity Unidentified
+                  {t('pat_unident')}
                 </span>
               )}
 
@@ -157,7 +158,7 @@ export function EmergencyPatientDetailsPage() {
 
             <p className="text-xs text-slate-500 font-medium flex items-center gap-1.5 mt-1">
               <Clock className="w-4 h-4 text-slate-400" />
-              <span>Intake Registered: {formatDateTime(patient.registration_time)} ({formatRelativeTime(patient.registration_time)})</span>
+              <span>{t('pat_intakeReg')} {formatDateTime(patient.registration_time)} ({formatRelativeTime(patient.registration_time)})</span>
             </p>
           </div>
 
@@ -168,7 +169,7 @@ export function EmergencyPatientDetailsPage() {
               className="inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-sm"
             >
               <Ambulance className="w-4 h-4" />
-              <span>Initiate Hospital Transfer</span>
+              <span>{t('pat_initTransfer')}</span>
             </Link>
 
             <Link
@@ -176,7 +177,7 @@ export function EmergencyPatientDetailsPage() {
               className="inline-flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-sm"
             >
               <Send className="w-4 h-4" />
-              <span>Family Notification</span>
+              <span>{t('pat_famNotif')}</span>
             </Link>
 
             {patient.identification_status !== 'verified_linked' && (
@@ -186,7 +187,7 @@ export function EmergencyPatientDetailsPage() {
                 className="inline-flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-sm"
               >
                 <UserCheck className="w-4 h-4" />
-                <span>Verify & Link Identity</span>
+                <span>{t('pat_verifyLink')}</span>
               </button>
             )}
           </div>
@@ -195,7 +196,7 @@ export function EmergencyPatientDetailsPage() {
         {/* Discovery Details Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-100 text-xs">
           <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block">Current Facility</span>
+            <span className="text-[10px] text-slate-400 font-bold uppercase block">{t('pat_curFac')}</span>
             <span className="font-extrabold text-slate-900 text-sm block mt-0.5">
               {currentHospital?.name || 'Apex Trauma Institute'}
             </span>
@@ -203,28 +204,28 @@ export function EmergencyPatientDetailsPage() {
           </div>
 
           <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block">Discovery Site</span>
+            <span className="text-[10px] text-slate-400 font-bold uppercase block">{t('pat_discSite')}</span>
             <span className="font-bold text-slate-900 text-sm block mt-0.5 line-clamp-2">
-              {patient.found_location || 'Not specified'}
+              {patient.found_location || t('pat_notSpec')}
             </span>
           </div>
 
           <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block">Intake Officer</span>
+            <span className="text-[10px] text-slate-400 font-bold uppercase block">{t('pat_intakeOff')}</span>
             <span className="font-bold text-slate-900 text-sm block mt-0.5">
-              {patient.reported_by || 'Paramedic Unit'}
+              {patient.reported_by || t('pat_paramedic')}
             </span>
-            <span className="text-[11px] text-slate-500">Emergency Staff</span>
+            <span className="text-[11px] text-slate-500">{t('pat_emgStaff')}</span>
           </div>
         </div>
 
         {/* Emergency Observations */}
         <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-1">
           <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
-            Clinical Observations & Triage Summary
+            {t('pat_obsTitle')}
           </span>
           <p className="text-xs text-slate-800 leading-relaxed font-medium">
-            {patient.emergency_observations || 'No additional initial observations documented.'}
+            {patient.emergency_observations || t('pat_noObs')}
           </p>
         </div>
       </div>
@@ -235,11 +236,11 @@ export function EmergencyPatientDetailsPage() {
           <div className="flex items-center gap-2">
             <Ambulance className="w-5 h-5 text-teal-600" />
             <h2 className="text-lg font-black text-slate-900">
-              Inter-Hospital Transfer History & Handover Continuity
+              {t('pat_xferTitle')}
             </h2>
           </div>
           <span className="text-xs font-semibold text-slate-400">
-            {patient.transfers?.length || 0} Transfers Recorded
+            {patient.transfers?.length || 0} {t('pat_xferCount')}
           </span>
         </div>
 
@@ -262,17 +263,17 @@ export function EmergencyPatientDetailsPage() {
                     </div>
 
                     <p className="text-slate-700">
-                      <strong>Transfer Reason:</strong> {tr.reason}
+                      <strong>{t('pat_reason')}</strong> {tr.reason}
                     </p>
 
                     <div className="p-2.5 bg-white rounded-xl border border-slate-200 text-slate-600">
-                      <strong className="block text-[11px] text-slate-400 uppercase">Handover Notes:</strong>
+                      <strong className="block text-[11px] text-slate-400 uppercase">{t('pat_handover')}</strong>
                       <span className="font-medium text-xs text-slate-800">{tr.handover_notes}</span>
                     </div>
 
                     <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
-                      <span>Transport Unit: <strong>{tr.transport_unit}</strong></span>
-                      <span>Authorized By: <strong>{tr.authorized_officer}</strong></span>
+                      <span>{t('pat_unit')} <strong>{tr.transport_unit}</strong></span>
+                      <span>{t('pat_authBy')} <strong>{tr.authorized_officer}</strong></span>
                     </div>
                   </div>
                 </div>
@@ -281,7 +282,7 @@ export function EmergencyPatientDetailsPage() {
           </div>
         ) : (
           <p className="text-xs text-slate-500 italic py-2">
-            No transfer entries yet. Patient remains at initial receiving facility.
+            {t('pat_noXfer')}
           </p>
         )}
       </div>
@@ -290,17 +291,17 @@ export function EmergencyPatientDetailsPage() {
       <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-4">
         <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
           <FileText className="w-5 h-5 text-teal-600" />
-          Clinical Audit & Event Trail
+          {t('pat_audit')}
         </h2>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-slate-200 text-slate-400 uppercase font-bold text-[10px]">
-                <th className="pb-3">Event Type</th>
-                <th className="pb-3">Summary</th>
-                <th className="pb-3">Authorized Staff</th>
-                <th className="pb-3 text-right">Timestamp</th>
+                <th className="pb-3">{t('pat_thEvent')}</th>
+                <th className="pb-3">{t('pat_thSummary')}</th>
+                <th className="pb-3">{t('pat_thStaff')}</th>
+                <th className="pb-3 text-right">{t('common_timestamp')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium">
@@ -323,46 +324,46 @@ export function EmergencyPatientDetailsPage() {
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl animate-in zoom-in-95 duration-200">
             <div>
               <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                Identity Linking Procedure
+                {t('pat_linkBadge')}
               </span>
               <h3 className="text-lg font-black text-slate-900 mt-1">
-                Link Record to Verified Profile
+                {t('pat_linkTitle')}
               </h3>
               <p className="text-xs text-slate-500">
-                Authorized healthcare personnel verification. The temporary emergency record ({patient.temporary_patient_id}) will be formally linked to the patient profile.
+                {t('pat_linkIntro').replace('{id}', patient.temporary_patient_id)}
               </p>
             </div>
 
             {availableProfile ? (
               <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-2xl text-xs space-y-2">
                 <span className="font-extrabold text-emerald-950 text-sm block">
-                  Candidate Profile: {availableProfile.name}
+                  {t('pat_cand')} {availableProfile.name}
                 </span>
                 <p className="text-slate-700">
-                  <strong>Blood Group:</strong> {availableProfile.blood_group} • <strong>Age/Gender:</strong> {availableProfile.age} Yrs ({availableProfile.gender})
+                  <strong>{t('pat_blood')}</strong> {availableProfile.blood_group} • <strong>{t('pat_ageGender')}</strong> {availableProfile.age} {t('pat_yrs')} ({availableProfile.gender})
                 </p>
                 <p className="text-slate-700">
-                  <strong>Emergency Contact:</strong> {availableProfile.emergency_contact_name} ({availableProfile.emergency_contact_phone})
+                  <strong>{t('pat_emgContact')}</strong> {availableProfile.emergency_contact_name} ({availableProfile.emergency_contact_phone})
                 </p>
                 {availableProfile.allergies && (
                   <p className="text-rose-700 font-bold">
-                    <strong>Allergies:</strong> {availableProfile.allergies}
+                    <strong>{t('pat_allergies')}</strong> {availableProfile.allergies}
                   </p>
                 )}
               </div>
             ) : (
-              <p className="text-xs text-rose-600">No registered candidate profile found to match.</p>
+              <p className="text-xs text-rose-600">{t('pat_noCand')}</p>
             )}
 
             <div>
               <label className="text-xs font-bold text-slate-700 block mb-1">
-                Clinical Verification Notes (Mandatory)
+                {t('pat_verNotes')}
               </label>
               <textarea
                 rows={3}
                 value={verificationNotes}
                 onChange={(e) => setVerificationNotes(e.target.value)}
-                placeholder="Detail verification method (e.g. Identity documents verified with attending relative, biometric or facial confirmation)."
+                placeholder={t('pat_verPh')}
                 className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
               />
             </div>
@@ -370,7 +371,7 @@ export function EmergencyPatientDetailsPage() {
             {linkSuccess && (
               <div className="p-3 bg-emerald-100 text-emerald-900 text-xs font-bold rounded-xl flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-700" />
-                <span>Identity linked successfully! Transfer and audit history preserved.</span>
+                <span>{t('pat_linkOk')}</span>
               </div>
             )}
 
@@ -380,7 +381,7 @@ export function EmergencyPatientDetailsPage() {
                 onClick={() => setIsLinkModalOpen(false)}
                 className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100"
               >
-                Cancel
+                {t('common_cancel')}
               </button>
 
               <button
@@ -390,7 +391,7 @@ export function EmergencyPatientDetailsPage() {
                 className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition shadow-sm flex items-center gap-1.5"
               >
                 {isLinking ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <UserCheck className="w-3.5 h-3.5" />}
-                <span>Confirm & Link Record</span>
+                <span>{t('pat_confirmLink')}</span>
               </button>
             </div>
           </div>

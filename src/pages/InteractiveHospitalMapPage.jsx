@@ -52,11 +52,11 @@ export function InteractiveHospitalMapPage() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
-              Interactive Route Navigation
+              {t('map_badge')}
             </span>
             {!isOnline && (
               <span className="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
-                Offline Coordinates Loaded
+                {t('map_offline')}
               </span>
             )}
           </div>
@@ -64,7 +64,7 @@ export function InteractiveHospitalMapPage() {
             {t('navMap')}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500">
-            Locate nearest facilities and generate estimated emergency transit lines.
+            {t('map_sub')}
           </p>
         </div>
 
@@ -76,7 +76,7 @@ export function InteractiveHospitalMapPage() {
           className="inline-flex items-center gap-1.5 bg-white border border-slate-300 text-slate-800 hover:bg-slate-50 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition"
         >
           <MapPin className={`w-4 h-4 text-teal-600 ${isLocating ? 'animate-bounce' : ''}`} />
-          {isLocating ? 'Updating GPS...' : 'Locate My Position'}
+          {isLocating ? t('map_updGps') : t('map_locate')}
         </button>
       </div>
 
@@ -96,7 +96,7 @@ export function InteractiveHospitalMapPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between pb-1">
             <h3 className="font-extrabold text-sm text-slate-900">
-              Facilities ({hospitals.length})
+              {t('map_facilities')} ({hospitals.length})
             </h3>
             <button
               type="button"
@@ -107,7 +107,7 @@ export function InteractiveHospitalMapPage() {
                   : 'bg-slate-100 text-slate-700 border-slate-200'
               }`}
             >
-              24/7 Only
+              {t('map_247')}
             </button>
           </div>
 
@@ -128,7 +128,7 @@ export function InteractiveHospitalMapPage() {
                     <h4 className="font-bold text-slate-900 line-clamp-1">{hosp.name}</h4>
                     {hosp.distanceKm != null && (
                       <span className="font-extrabold text-teal-800 shrink-0">
-                        {hosp.distanceKm} km
+                        {hosp.distanceKm} {t('map_km')}
                       </span>
                     )}
                   </div>
@@ -139,14 +139,14 @@ export function InteractiveHospitalMapPage() {
 
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="font-semibold text-slate-700">
-                      {hosp.totalAvailableBeds || 0} Beds reported
+                      {t('map_beds').replace('{n}', hosp.totalAvailableBeds || 0)}
                     </span>
                     <Link
                       to={`/hospitals/${hosp.id}`}
                       className="text-teal-700 font-bold hover:underline"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      Details →
+                      {t('map_details')}
                     </Link>
                   </div>
                 </div>

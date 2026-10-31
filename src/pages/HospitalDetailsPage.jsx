@@ -51,10 +51,10 @@ export function HospitalDetailsPage() {
     return (
       <div className="max-w-2xl mx-auto py-16 text-center space-y-4">
         <Building2 className="w-12 h-12 text-slate-300 mx-auto" />
-        <h2 className="text-xl font-bold text-slate-800">Hospital Not Found</h2>
-        <p className="text-xs text-slate-500">The requested facility could not be located in local or remote records.</p>
+        <h2 className="text-xl font-bold text-slate-800">{t('hd_nf')}</h2>
+        <p className="text-xs text-slate-500">{t('hd_nfText')}</p>
         <Link to="/hospitals" className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-700 hover:underline">
-          <ArrowLeft className="w-4 h-4" /> Return to Hospital Discovery
+          <ArrowLeft className="w-4 h-4" /> {t('hd_ret')}
         </Link>
       </div>
     );
@@ -78,9 +78,9 @@ export function HospitalDetailsPage() {
         <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 text-xs text-amber-900 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div>
-            <h4 className="font-bold text-sm">Information Freshness Warning</h4>
+            <h4 className="font-bold text-sm">{t('hd_staleTitle')}</h4>
             <p className="mt-0.5">
-              The bed and medicine counts for this facility were reported over 6 hours ago ({formatRelativeTime(hospital.last_updated)}). Because emergency capacity changes rapidly, we recommend verifying critical needs by calling the casualty desk directly.
+              {t('hd_staleText').replace('{time}', formatRelativeTime(hospital.last_updated))}
             </p>
           </div>
         </div>
@@ -93,14 +93,14 @@ export function HospitalDetailsPage() {
             <div className="flex flex-wrap items-center gap-2 mb-2">
               {hospital.emergency_services_available ? (
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-200">
-                  <ShieldAlert className="w-4 h-4 text-rose-600" /> 24/7 Emergency Casualty
+                  <ShieldAlert className="w-4 h-4 text-rose-600" /> {t('hd_emgBadge')}
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
-                  Day Facility
+                  {t('hd_day')}
                 </span>
               )}
-              <StatusBadge type="verified" label={hospital.verification_status || 'Verified Partner'} />
+              <StatusBadge type="verified" label={hospital.verification_status || t('hd_verified')} />
             </div>
 
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -117,7 +117,7 @@ export function HospitalDetailsPage() {
               href={`tel:${hospital.emergency_phone || hospital.contact_phone}`}
               className="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-md shadow-rose-600/20 emergency-pulse transition"
             >
-              <Phone className="w-4 h-4" /> Emergency Desk: {hospital.emergency_phone || hospital.contact_phone}
+              <Phone className="w-4 h-4" /> {t('hd_desk')} {hospital.emergency_phone || hospital.contact_phone}
             </a>
 
             <Link
@@ -138,7 +138,7 @@ export function HospitalDetailsPage() {
 
           <p className="flex items-center gap-1.5 text-slate-500 font-medium">
             <Clock className="w-4 h-4 text-slate-400" />
-            <span>Last reported: {formatDateTime(hospital.last_updated)} ({formatRelativeTime(hospital.last_updated)})</span>
+            <span>{t('common_lastReported')} {formatDateTime(hospital.last_updated)} ({formatRelativeTime(hospital.last_updated)})</span>
           </p>
         </div>
       </div>
@@ -149,11 +149,11 @@ export function HospitalDetailsPage() {
           <div className="flex items-center gap-2">
             <Bed className="w-5 h-5 text-teal-600" />
             <h2 className="text-lg font-black text-slate-900">
-              Reported Bed Availability
+              {t('hd_bedTitle')}
             </h2>
           </div>
           <span className="text-xs font-semibold text-slate-400">
-            Source: Hospital Triage Desk
+            {t('hd_src')}
           </span>
         </div>
 
@@ -161,11 +161,11 @@ export function HospitalDetailsPage() {
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-slate-200 text-slate-400 uppercase font-bold text-[10px]">
-                <th className="pb-3">Bed Classification</th>
-                <th className="pb-3">Total Capacity</th>
-                <th className="pb-3">Reported Available</th>
-                <th className="pb-3">Status</th>
-                <th className="pb-3 text-right">Timestamp</th>
+                <th className="pb-3">{t('hd_thClass')}</th>
+                <th className="pb-3">{t('hd_thTot')}</th>
+                <th className="pb-3">{t('hd_thAvail')}</th>
+                <th className="pb-3">{t('common_status')}</th>
+                <th className="pb-3 text-right">{t('common_timestamp')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium">
@@ -203,7 +203,7 @@ export function HospitalDetailsPage() {
               to="/admin/beds"
               className="text-xs font-bold text-sky-700 hover:underline inline-flex items-center gap-1"
             >
-              Update these bed numbers in Administrator Panel →
+              {t('hd_updLink')}
             </Link>
           </div>
         )}
@@ -215,11 +215,11 @@ export function HospitalDetailsPage() {
           <div className="flex items-center gap-2">
             <Pill className="w-5 h-5 text-teal-600" />
             <h2 className="text-lg font-black text-slate-900">
-              Essential Medicine & Blood Inventory
+              {t('hd_medTitle')}
             </h2>
           </div>
           <span className="text-xs font-semibold text-slate-400">
-            Emergency Supplies
+            {t('hd_supplies')}
           </span>
         </div>
 
@@ -227,10 +227,10 @@ export function HospitalDetailsPage() {
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-slate-200 text-slate-400 uppercase font-bold text-[10px]">
-                <th className="pb-3">Essential Drug / Blood Supply</th>
-                <th className="pb-3">Reported Stock</th>
-                <th className="pb-3">Unit</th>
-                <th className="pb-3 text-right">Reported At</th>
+                <th className="pb-3">{t('hd_thDrug')}</th>
+                <th className="pb-3">{t('hd_thStock')}</th>
+                <th className="pb-3">{t('hd_thUnit')}</th>
+                <th className="pb-3 text-right">{t('hd_thAt')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium">
@@ -258,7 +258,7 @@ export function HospitalDetailsPage() {
               to="/admin/medicines"
               className="text-xs font-bold text-sky-700 hover:underline inline-flex items-center gap-1"
             >
-              Manage Medicine Stock in Administrator Panel →
+              {t('hd_manage')}
             </Link>
           </div>
         )}
@@ -267,7 +267,7 @@ export function HospitalDetailsPage() {
       {/* Services and Clinical Capabilities */}
       <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-4">
         <h2 className="text-lg font-black text-slate-900">
-          Services & Specialized Capabilities
+          {t('hd_services')}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
           {(hospital.services || []).map((svc, idx) => (
