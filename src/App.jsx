@@ -8,7 +8,7 @@ import { OfflineProvider } from './contexts/OfflineContext';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { OfflineBanner } from './components/common/OfflineBanner';
-import { RequireAuth } from './components/common/RequireAuth';
+import { Requireauth } from './components/common/RequireAuth';
 
 // Pages
 import { LandingPage } from './pages/LandingPage';
