@@ -100,6 +100,11 @@ export default function App() {
             </div>
           </BrowserRouter>
         </OfflineProvider>
+        <main className="flex-1">
+          <ErrorBoundary>
+            <Routes> ... </Routes>
+          </ErrorBoundary>
+        </main>
       </AuthProvider>
     </LanguageProvider>
   );
