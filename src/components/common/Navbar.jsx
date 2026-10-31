@@ -8,7 +8,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { AuthButton } from './AuthButton';
 import {
   Activity, PhoneCall, Search, MapPin, Mic, Database,
-  Building2, Stethoscope, User, Menu, X, AlertCircle,
+  Building2, Stethoscope, User, Menu, X, AlertCircle,ChevronDown
 } from 'lucide-react';
 
 const COMMON_LINKS = [
@@ -92,10 +92,14 @@ export function Navbar() {
               </nav>
 
               {/* Right actions */}
-              <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-                <div className="shrink-0">
-                  <LanguageSelector />
-                </div>
+              <div className="relative shrink-0 [&_select]:appearance-none [&_select]:pr-8">
+                <LanguageSelector />
+                <ChevronDown
+                  className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-700"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                />
+              </div>
                 <div className="hidden xl:block">
                   <AuthButton />
                 </div>
