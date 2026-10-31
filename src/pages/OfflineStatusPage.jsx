@@ -1,9 +1,10 @@
-import React from 'react';
+
 import { useOffline } from '../../contexts/OfflineContext';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { WifiOff, AlertTriangle, RefreshCw } from 'lucide-react';
+import { WifiOff, RefreshCw } from 'lucide-react';
 import { formatRelativeTime } from '../../utils/formatters';
-
+import { useLanguage } from '../contexts/LanguageContext.js';
+import { buildRealtimeURL } from 'openai/realtime/internal-base.mjs';
 export function OfflineBanner() {
   const { isOnline, simulateOffline, toggleSimulatedOffline, pendingQueueCount, lastSyncTime, triggerSync, syncStatus } = useOffline();
   const { t } = useLanguage();
