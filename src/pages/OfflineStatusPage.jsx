@@ -1,5 +1,5 @@
 
-export function OfflineBanner() {
+export function OfflineStatusPage() {
   const { isOnline, simulateOffline, toggleSimulatedOffline, pendingQueueCount, lastSyncTime, triggerSync, syncStatus } = useOffline();
   const { t } = useLanguage();
 
