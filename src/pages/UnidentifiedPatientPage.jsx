@@ -9,46 +9,46 @@ import { dbGetHospitals } from '../services/db';
 import { useAuth } from '../contexts/AuthContext';
 import { useOffline } from '../contexts/OfflineContext';
 import {
-  UserPlus,
   ShieldAlert,
   AlertTriangle,
-  Building2,
   Clock,
   MapPin,
   Stethoscope,
   Save,
-  ArrowLeft,
-  CheckCircle2
+  ArrowLeft
 } from 'lucide-react';
 
+const EMPTY_FORM = {
+  foundLocation: '',
+  estimatedAge: '',
+  apparentGender: '',
+  triageColor: '',
+  emergencyObservations: '',
+  currentHospitalId: '',
+  reportedBy: '',
+};
+
 export function UnidentifiedPatientPage() {
+  const { t } = useLanguage(); // <-- was missing
   const { user } = useAuth();
   const { isOnline } = useOffline();
   const navigate = useNavigate();
 
   const [hospitals, setHospitals] = useState([]);
   const [temporaryId, setTemporaryId] = useState('');
-  const [formData, setFormData] = useState({
-    foundLocation: '',
-    estimatedAge: 'Approx 30-35 years',
-    apparentGender: 'Male',
-    triageColor: 'RED (Immediate / Critical)',
-    emergencyObservations: '',
-    currentHospitalId: 'hosp-001',
-    reportedBy: user?.displayName || 'Paramedic Unit 4',
-  });
-
+  const [formData, setFormData] = useState(EMPTY_FORM); // all empty
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Generic handler: works for every input via its "name"
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   useEffect(() => {
     setTemporaryId(generateTemporaryPatientId());
-    dbGetHospitals().then((list) => {
-      setHospitals(list || []);
-      if (list && list.length > 0) {
-        setFormData((prev) => ({ ...prev, currentHospitalId: list[0].id }));
-      }
-    });
-  }, [user]);
+    dbGetHospitals().then((list) => setHospitals(list || [])); // no auto-select
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,6 +65,9 @@ export function UnidentifiedPatientPage() {
       setIsSubmitting(false);
     }
   };
+
+  const inputCls =
+    'w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600';
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
@@ -83,9 +86,7 @@ export function UnidentifiedPatientPage() {
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
             {t('unid_title')}
           </h1>
-          <p className="text-xs text-slate-500">
-            {t('unid_sub')}
-          </p>
+          <p className="text-xs text-slate-500">{t('unid_sub')}</p>
         </div>
 
         <div className="text-right bg-slate-900 text-white p-3 rounded-2xl shrink-0">
@@ -110,9 +111,8 @@ export function UnidentifiedPatientPage() {
         </div>
       )}
 
-      {/* Intake Form */}
       <form onSubmit={handleSubmit} className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-6">
-        {/* Triage & Incident Location */}
+        {/* Triage & Location */}
         <div>
           <h3 className="font-extrabold text-sm text-slate-900 mb-4 flex items-center gap-2">
             <ShieldAlert className="w-4 h-4 text-rose-600" />
@@ -121,14 +121,15 @@ export function UnidentifiedPatientPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="font-bold text-slate-700 block mb-1">
-                {t('unid_urg')}
-              </label>
+              <label className="font-bold text-slate-700 block mb-1">{t('unid_urg')}</label>
               <select
+                name="triageColor"
+                required
                 value={formData.triageColor}
-                onChange={(e) => setFormData({ ...formData, triageColor: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-bold text-rose-800 bg-rose-50/50 focus:ring-2 focus:ring-teal-600"
+                onChange={handleChange}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-bold focus:ring-2 focus:ring-teal-600"
               >
+                <option value="" disabled>-- Select --</option>
                 <option value="RED (Immediate / Critical)">{t('unid_red')}</option>
                 <option value="YELLOW (Urgent)">{t('unid_yel')}</option>
                 <option value="GREEN (Delayed)">{t('unid_grn')}</option>
@@ -136,16 +137,15 @@ export function UnidentifiedPatientPage() {
             </div>
 
             <div>
-              <label className="font-bold text-slate-700 block mb-1">
-                {t('unid_loc')}
-              </label>
+              <label className="font-bold text-slate-700 block mb-1">{t('unid_loc')}</label>
               <div className="relative">
                 <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
+                  name="foundLocation"
                   required
                   value={formData.foundLocation}
-                  onChange={(e) => setFormData({ ...formData, foundLocation: e.target.value })}
+                  onChange={handleChange}
                   placeholder={t('unid_phLoc')}
                   className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
                 />
@@ -154,7 +154,7 @@ export function UnidentifiedPatientPage() {
           </div>
         </div>
 
-        {/* Physical Apparent Traits */}
+        {/* Physical traits */}
         <div className="pt-4 border-t border-slate-100">
           <h3 className="font-extrabold text-sm text-slate-900 mb-4 flex items-center gap-2">
             <Stethoscope className="w-4 h-4 text-teal-600" />
@@ -166,20 +166,25 @@ export function UnidentifiedPatientPage() {
               <label className="font-bold text-slate-700 block mb-1">{t('unid_age')}</label>
               <input
                 type="text"
+                name="estimatedAge"
+                required
                 value={formData.estimatedAge}
-                onChange={(e) => setFormData({ ...formData, estimatedAge: e.target.value })}
+                onChange={handleChange}
                 placeholder={t('unid_phAge')}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                className={inputCls}
               />
             </div>
 
             <div>
               <label className="font-bold text-slate-700 block mb-1">{t('unid_gender')}</label>
               <select
+                name="apparentGender"
+                required
                 value={formData.apparentGender}
-                onChange={(e) => setFormData({ ...formData, apparentGender: e.target.value })}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                onChange={handleChange}
+                className={inputCls}
               >
+                <option value="" disabled>-- Select --</option>
                 <option value="Male">{t('unid_male')}</option>
                 <option value="Female">{t('unid_female')}</option>
                 <option value="Other / Unknown">{t('unid_other')}</option>
@@ -188,7 +193,7 @@ export function UnidentifiedPatientPage() {
           </div>
         </div>
 
-        {/* Clinical Observations */}
+        {/* Clinical observations */}
         <div className="pt-4 border-t border-slate-100">
           <h3 className="font-extrabold text-sm text-slate-900 mb-4 flex items-center gap-2">
             <Clock className="w-4 h-4 text-teal-600" />
@@ -197,16 +202,15 @@ export function UnidentifiedPatientPage() {
 
           <div className="space-y-4 text-xs">
             <div>
-              <label className="font-bold text-slate-700 block mb-1">
-                {t('unid_obs')}
-              </label>
+              <label className="font-bold text-slate-700 block mb-1">{t('unid_obs')}</label>
               <textarea
                 rows={4}
+                name="emergencyObservations"
                 required
                 value={formData.emergencyObservations}
-                onChange={(e) => setFormData({ ...formData, emergencyObservations: e.target.value })}
+                onChange={handleChange}
                 placeholder={t('unid_phObs')}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                className={inputCls}
               />
             </div>
 
@@ -214,14 +218,15 @@ export function UnidentifiedPatientPage() {
               <div>
                 <label className="font-bold text-slate-700 block mb-1">{t('unid_recv')}</label>
                 <select
+                  name="currentHospitalId"
+                  required
                   value={formData.currentHospitalId}
-                  onChange={(e) => setFormData({ ...formData, currentHospitalId: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-300 font-bold focus:ring-2 focus:ring-teal-600"
+                  onChange={handleChange}
+                  className={inputCls + ' font-bold'}
                 >
+                  <option value="" disabled>-- Select hospital --</option>
                   {hospitals.map((h) => (
-                    <option key={h.id} value={h.id}>
-                      {h.name}
-                    </option>
+                    <option key={h.id} value={h.id}>{h.name}</option>
                   ))}
                 </select>
               </div>
@@ -230,26 +235,26 @@ export function UnidentifiedPatientPage() {
                 <label className="font-bold text-slate-700 block mb-1">{t('unid_officer')}</label>
                 <input
                   type="text"
+                  name="reportedBy"
                   required
                   value={formData.reportedBy}
-                  onChange={(e) => setFormData({ ...formData, reportedBy: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                  onChange={handleChange}
+                  placeholder="Enter reporting officer name"
+                  className={inputCls}
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Submit Button */}
+        {/* Submit */}
         <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-          <span className="text-[11px] text-slate-500">
-            {t('unid_foot')}
-          </span>
+          <span className="text-[11px] text-slate-500">{t('unid_foot')}</span>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-md shadow-rose-600/30 transition"
+            className="inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 disabled:opacity-60 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-md shadow-rose-600/30 transition"
           >
             <Save className="w-4 h-4" />
             <span>{isSubmitting ? t('unid_registering') : t('unid_create')}</span>
