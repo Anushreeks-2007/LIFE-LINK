@@ -1,6 +1,6 @@
 
-import { useOffline } from '../../contexts/OfflineContext';
-import { useLanguage } from '../../contexts/LanguageContext';
+import { useOffline } from '../contexts/OfflineContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { WifiOff, RefreshCw } from 'lucide-react';
 
 
