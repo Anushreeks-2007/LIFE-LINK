@@ -1,47 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { dbGetProfileById, dbSaveProfile } from '../services/db';
-import { SYNTHETIC_REGISTERED_PROFILE } from '../utils/syntheticData';
 import {
   User,
   Phone,
   Heart,
-  AlertTriangle,
   QrCode,
   Save,
   CheckCircle2,
   ShieldCheck,
-  Lock,
   ArrowRight
 } from 'lucide-react';
 
+const PROFILE_ID = 'prof-demo-001'; // keep: the QR page likely loads this id
+
+const EMPTY_PROFILE = {
+  name: '',
+  age: '',
+  gender: '',
+  blood_group: '',
+  emergency_contact_name: '',
+  emergency_contact_relationship: '',
+  emergency_contact_phone: '',
+  secondary_contact_name: '',
+  secondary_contact_phone: '',
+  allergies: '',
+  relevant_medical_notes: '',
+  organ_donor_consent: false,
+};
+
 export function EmergencyProfilePage() {
-  const { t } = useLanguage();     // ← add this line
-  const { user } = useAuth();
+  const { t } = useLanguage();
 
-  const [profile, setProfile] = useState({
-    name: 'Rahul Sharma',
-    age: '32',
-    gender: 'Male',
-    blood_group: 'O+',
-    emergency_contact_name: 'Anjali Sharma',
-    emergency_contact_relationship: 'Sister',
-    emergency_contact_phone: '+91 98765 43210',
-    secondary_contact_name: 'Dr. Arvind Rao',
-    secondary_contact_phone: '+91 94480 11223',
-    allergies: 'Severe Penicillin Allergy (Anaphylaxis risk)',
-    relevant_medical_notes: 'Type 1 Diabetes Mellitus (Uses Insulin glargine 20u daily).',
-    organ_donor_consent: true,
-  });
-
+  const [profile, setProfile] = useState(EMPTY_PROFILE);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
+  // Generic handler for text inputs, selects and textareas
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfile((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Load a profile only if the user has saved one before
   useEffect(() => {
-    dbGetProfileById('prof-demo-001').then((saved) => {
+    dbGetProfileById(PROFILE_ID).then((saved) => {
       if (saved) {
-        setProfile(saved);
+        setProfile({ ...EMPTY_PROFILE, ...saved });
       }
     });
   }, []);
@@ -50,14 +55,18 @@ export function EmergencyProfilePage() {
     e.preventDefault();
     const updated = {
       ...profile,
-      id: profile.id || 'prof-demo-001',
+      id: profile.id || PROFILE_ID,
       qr_token: profile.qr_token || 'LL-TOKEN-8F492E-SECURE',
       is_revoked: false,
     };
     await dbSaveProfile(updated);
+    setProfile(updated);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
   };
+
+  const inputCls =
+    'w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600';
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -70,9 +79,7 @@ export function EmergencyProfilePage() {
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
             {t('prof_title')}
           </h1>
-          <p className="text-xs text-slate-500">
-            {t('prof_sub')}
-          </p>
+          <p className="text-xs text-slate-500">{t('prof_sub')}</p>
         </div>
 
         <Link
@@ -89,9 +96,7 @@ export function EmergencyProfilePage() {
         <ShieldCheck className="w-5 h-5 text-teal-700 shrink-0 mt-0.5" />
         <div className="space-y-1">
           <h4 className="font-bold text-sm">{t('prof_privTitle')}</h4>
-          <p className="text-teal-800">
-            {t('prof_privText')}
-          </p>
+          <p className="text-teal-800">{t('prof_privText')}</p>
         </div>
       </div>
 
@@ -108,20 +113,25 @@ export function EmergencyProfilePage() {
               <label className="font-bold text-slate-700 block mb-1">{t('prof_name')}</label>
               <input
                 type="text"
+                name="name"
                 required
                 value={profile.name}
-                onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                onChange={handleChange}
+                placeholder="Enter full legal name"
+                className={inputCls}
               />
             </div>
 
             <div>
               <label className="font-bold text-slate-700 block mb-1">{t('prof_blood')}</label>
               <select
+                name="blood_group"
+                required
                 value={profile.blood_group}
-                onChange={(e) => setProfile({ ...profile, blood_group: e.target.value })}
+                onChange={handleChange}
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600 font-bold"
               >
+                <option value="" disabled>-- Select --</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
                 <option value="B+">B+</option>
@@ -146,11 +156,12 @@ export function EmergencyProfilePage() {
               <label className="font-bold text-slate-700 block mb-1">{t('prof_cName')}</label>
               <input
                 type="text"
+                name="emergency_contact_name"
                 required
                 value={profile.emergency_contact_name}
-                onChange={(e) => setProfile({ ...profile, emergency_contact_name: e.target.value })}
+                onChange={handleChange}
                 placeholder={t('prof_phName')}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                className={inputCls}
               />
             </div>
 
@@ -158,11 +169,12 @@ export function EmergencyProfilePage() {
               <label className="font-bold text-slate-700 block mb-1">{t('prof_rel')}</label>
               <input
                 type="text"
+                name="emergency_contact_relationship"
                 required
                 value={profile.emergency_contact_relationship}
-                onChange={(e) => setProfile({ ...profile, emergency_contact_relationship: e.target.value })}
+                onChange={handleChange}
                 placeholder={t('prof_phRel')}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                className={inputCls}
               />
             </div>
 
@@ -170,11 +182,12 @@ export function EmergencyProfilePage() {
               <label className="font-bold text-slate-700 block mb-1">{t('prof_phone')}</label>
               <input
                 type="tel"
+                name="emergency_contact_phone"
                 required
                 value={profile.emergency_contact_phone}
-                onChange={(e) => setProfile({ ...profile, emergency_contact_phone: e.target.value })}
+                onChange={handleChange}
                 placeholder="+91 98765 43210"
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                className={inputCls}
               />
             </div>
           </div>
@@ -188,28 +201,26 @@ export function EmergencyProfilePage() {
           </h3>
           <div className="space-y-4 text-xs">
             <div>
-              <label className="font-bold text-slate-700 block mb-1">
-                {t('prof_allergy')}
-              </label>
+              <label className="font-bold text-slate-700 block mb-1">{t('prof_allergy')}</label>
               <input
                 type="text"
+                name="allergies"
                 value={profile.allergies}
-                onChange={(e) => setProfile({ ...profile, allergies: e.target.value })}
+                onChange={handleChange}
                 placeholder={t('prof_phAllergy')}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                className={inputCls}
               />
             </div>
 
             <div>
-              <label className="font-bold text-slate-700 block mb-1">
-                {t('prof_history')}
-              </label>
+              <label className="font-bold text-slate-700 block mb-1">{t('prof_history')}</label>
               <textarea
                 rows={3}
+                name="relevant_medical_notes"
                 value={profile.relevant_medical_notes}
-                onChange={(e) => setProfile({ ...profile, relevant_medical_notes: e.target.value })}
+                onChange={handleChange}
                 placeholder={t('prof_phHistory')}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600"
+                className={inputCls}
               />
             </div>
 
@@ -217,7 +228,7 @@ export function EmergencyProfilePage() {
               <input
                 type="checkbox"
                 id="organDonor"
-                checked={profile.organ_donor_consent}
+                checked={!!profile.organ_donor_consent}
                 onChange={(e) => setProfile({ ...profile, organ_donor_consent: e.target.checked })}
                 className="w-4 h-4 rounded text-teal-600 focus:ring-teal-500"
               />

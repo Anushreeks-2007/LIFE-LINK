@@ -13,14 +13,14 @@ const DEFAULT_DEMO_USERS = {
   [ROLES.PUBLIC]: {
     id: 'user-public-001',
     email: 'citizen@lifelink.demo',
-    displayName: 'Rahul Sharma (Public Citizen)',
+    displayName: 'Public Citizen',
     role: ROLES.PUBLIC,
     assignedHospitalId: null,
   },
   [ROLES.HOSPITAL_ADMIN]: {
     id: 'user-admin-001',
     email: 'admin.apex@lifelink.demo',
-    displayName: 'Dr. Neha Sen (Apex Hospital Administrator)',
+    displayName: 'Apex Hospital Administrator',
     role: ROLES.HOSPITAL_ADMIN,
     assignedHospitalId: 'hosp-001', // Apex Trauma
     hospitalName: 'Apex Trauma & Emergency Institute',
@@ -28,7 +28,7 @@ const DEFAULT_DEMO_USERS = {
   [ROLES.HEALTHCARE_STAFF]: {
     id: 'user-staff-001',
     email: 'paramedic.patil@lifelink.demo',
-    displayName: 'Paramedic S. Patil (EMS Unit 4 / ER Staff)',
+    displayName: 'EMS Unit 4 / ER Staff',
     role: ROLES.HEALTHCARE_STAFF,
     assignedHospitalId: 'hosp-001',
     hospitalName: 'Apex Trauma & Emergency Institute',
