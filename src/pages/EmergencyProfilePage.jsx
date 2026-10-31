@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 
 export function EmergencyProfilePage() {
+  const { t } = useLanguage();     // ← add this line
   const { user } = useAuth();
 
   const [profile, setProfile] = useState({
