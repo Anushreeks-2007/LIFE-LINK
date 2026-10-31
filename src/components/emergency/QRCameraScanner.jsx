@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import { useLanguage } from '../../contexts/LanguageContext';
-
+ 
 export function QRCameraScanner({ onScan }) {
   const { t } = useLanguage();
   const onScanRef = useRef(onScan);
@@ -12,7 +12,7 @@ export function QRCameraScanner({ onScan }) {
   // Keep the latest fallback text without restarting the camera when the language changes.
   const startFailRef = useRef(t('qrcStartFail'));
   startFailRef.current = t('qrcStartFail');
-
+ 
   useEffect(() => {
     const scanner = new Html5Qrcode('qr-camera-region', {
       formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
@@ -21,10 +21,10 @@ export function QRCameraScanner({ onScan }) {
     });
     let started = false;
     let cancelled = false;
-
+ 
     const stopScanner = () =>
       scanner.stop().then(() => scanner.clear()).catch(() => {});
-
+ 
     const timer = setTimeout(() => {
       scanner
         .start(
@@ -46,14 +46,14 @@ export function QRCameraScanner({ onScan }) {
           setError(typeof err === 'string' ? err : err?.message || startFailRef.current);
         });
     }, 100);
-
+ 
     return () => {
       cancelled = true;
       clearTimeout(timer);
       if (started) stopScanner();
     };
   }, []);
-
+ 
   return (
     <div className="w-full flex flex-col items-center">
       <style>{`#qr-camera-region video { transform: scaleX(-1); }`}</style>
@@ -69,3 +69,4 @@ export function QRCameraScanner({ onScan }) {
     </div>
   );
 }
+ 

@@ -1,0 +1,229 @@
+// Translations for shared components: Footer, HospitalCard, HospitalFilters, HospitalMap,
+// VoiceAssistantWidget, StatusBadge, OfflineBanner, FirstAidGuide, QR pages and camera scanner.
+// Merged automatically through translationsExtra.js.
+export const componentTranslations = {
+  en: {
+    // Shared
+    callLabel: "Call", routeLabel: "Route", detailsLabel: "Details", kmUnit: "km", minsUnit: "mins",
+    bloodGroup: "Blood Group", emergencyContact: "Emergency Contact",
+ 
+    // Hospital card
+    hcDayClinic: "Day Clinic / OPD Only", hcReportedBeds: "Reported Beds:", hcIcuStatus: "ICU Status:",
+    hcIcuOpen: "ICU open", hcFull: "Full", hcNA: "N/A", hcMore: "more", hcUnknown: "Unknown",
+ 
+    // Hospital filters
+    fltClear: "Clear", fltDetecting: "Detecting GPS...", fltGpsActive: "GPS Location Active",
+    fltUseGps: "Use My GPS Location", fltSortName: "Sort by Name",
+ 
+    // Map
+    mapYourLocation: "Your Current Location", mapGpsActive: "GPS Active", mapBedsReported: "Reported Beds Available",
+    mapLegend: "Map Legend", mapLegendEmergency: "24/7 Emergency Hospital", mapLegendGeneral: "General Clinic / Hospital",
+    mapLegendYou: "Your Location", mapSelected: "Selected Facility",
+    mapCalculating: "Calculating fastest emergency route...", mapDistance: "Distance:", mapTransit: "Est. Transit:",
+    mapEnableGps: "Enable GPS to view live route and duration.", mapExternal: "External Maps", mapOffline: "Offline Map Mode",
+ 
+    // Voice assistant
+    vaToggleTitle: "Toggle Spoken Voice Responses", vaReadoutOn: "Voice Readout On", vaMuted: "Muted",
+    vaStopAria: "Stop Listening", vaStartAria: "Start Voice Search",
+    vaListening: "Listening... Speak your healthcare request", vaTapToSpeak: "Tap to Speak", vaTrySaying: "Try saying:",
+    vaRecognized: "Recognized Query", vaIntent: "Intent Understood", vaShowResults: "Show Filtered Hospital Results",
+    vaQuick: "Quick Suggestions:", vaPlaceholder: "Or type your emergency request here...", vaSearch: "Search",
+    vaUnsupported: "Web Speech Recognition is not supported on this browser. Please use the text input below.",
+    vaVoiceError: "Voice error", vaTryAgain: "Please try again or type below.",
+    vaMicFailed: "Microphone access failed.", vaDefaultSample: "Find nearby emergency hospital",
+ 
+    // Status badge
+    sbOutdated: "Outdated (>6h)", sbLimited: "Limited", sbUnavailable: "Unavailable",
+    sbVerified: "Verified Partner", sbUnknown: "Unknown",
+ 
+    // Offline banner
+    obSimulated: "Simulated Offline Mode", obOffline: "Network Offline",
+    obMessage: "Accessing locally cached hospitals & emergency guides. Remote notifications & live sync require connectivity.",
+    obLastSynced: "Last synced:", obPendingOne: "Pending Update", obPendingMany: "Pending Updates",
+    obResume: "Resume Online", obRetry: "Retry Connection",
+ 
+    // First aid
+    faTitle: "Offline Emergency First Aid Guides",
+    faIntro: "Locally stored instructions accessible without internet. Keep calm and execute these immediate stabilization steps while emergency transport is en route.",
+    faCritical: "CRITICAL STEP", faUrgent: "URGENT ACTION",
+ 
+    // Footer
+    ftBlurb: "Offline-first emergency healthcare coordination platform.", ftPwa: "Offline-First Progressive Web App",
+    ftEmergencyCare: "Emergency Care", ftEmergencyLink: "Emergency Assistance (112/108)",
+    ftClinical: "Clinical Workflows", ftScan: "Scan Patient QR Token", ftRegister: "Register Unconscious Intake",
+    ftAdmin: "Hospital Bed & Medicine Admin", ftSync: "Offline Sync & Cached Records",
+    ftPrivacyTitle: "Privacy & Disclaimer",
+    ftDisclaimer: "LIFE-LINK complements rather than replaces professional emergency services. In acute life-threatening emergencies, contact government ambulance services (108 / 112) immediately.",
+    ftCharter: "Read Security & Privacy Charter →", ftCopyright: "LIFE-LINK Emergency Platform. Demonstration Prototype.",
+    ftPrivacyPolicy: "Privacy Policy", ftLangSettings: "Language & Settings", ftDiagnostics: "Offline Diagnostics",
+ 
+    // QR card page
+    qrgConfirm: "Are you sure you want to revoke this emergency QR token? Any existing printed cards will become invalid immediately.",
+    qrgLoading: "Loading Emergency QR details...", qrgBack: "Back to Profile Management",
+    qrgBadge: "Emergency ID Card", qrgTitle: "Emergency QR Access Token",
+    qrgSub: "Print or save this card in your wallet, phone lockscreen, or helmet.",
+    qrgPrivacyTitle: "Privacy Safeguard Guarantee",
+    qrgPrivacyBody: "This QR code stores NO personal health identifiers or raw family phone numbers. It contains only a secure cryptographic token ({token}) that authorized medical staff decrypt upon authenticated clinical intake.",
+    qrgCardHeader: "LIFE-LINK EMERGENCY CARD", qrgOfficial: "OFFICIAL TOKEN", qrgAgeGender: "Age / Gender", qrgYrs: "Yrs",
+    qrgAllergy: "Critical Allergy Alert", qrgScanWith: "Scan with LIFE-LINK Emergency Terminal",
+    qrgStatus: "Status: Verified Active", qrgRevoked: "New token generated! Old QR cards have been revoked.",
+    qrgPrint: "Print Card", qrgCopied: "Copied Token!", qrgCopy: "Copy Token", qrgRevoke: "Revoke & Regenerate QR",
+ 
+    // QR scanner page
+    qrsBadge: "Emergency Staff Terminal", qrsTitle: "Emergency Patient QR Scanner",
+    qrsSub: "Authorized scanner for decoding patient emergency tokens during clinical intake.",
+    qrsUnidentified: "Unidentified Intake", qrsOperator: "Operator:", qrsDefaultOperator: "Authorized Emergency Officer",
+    qrsAuthTerminal: "Authorized Terminal", qrsStopCamera: "Stop Camera",
+    qrsPoint: "Point camera at patient's printed or lockscreen QR card", qrsStartCamera: "Start Camera",
+    qrsManual: "Manual Token Entry / Barcode Scanner Input", qrsDecode: "Decode",
+    qrsUnrecognized: "Unrecognized QR token reference.", qrsVerified: "Verified Identity Retrieved",
+    qrsActive: "Active Profile", qrsPatientName: "Patient Name", qrsSecondary: "Secondary Contact",
+    qrsAllergyWarn: "CRITICAL ALLERGY WARNING", qrsConditions: "Medical Conditions", qrsLink: "Link to Incident Intake",
+    qrcScanning: "Scanning... hold the QR code steady, 15-30 cm from the camera.",
+    qrcErrorPrefix: "Camera error", qrcErrorHelp: "Allow camera access in the address bar, or use manual entry below.",
+    qrcStartFail: "Could not start camera.",
+  },
+ 
+  kn: {
+    callLabel: "ಕರೆ ಮಾಡಿ", routeLabel: "ಮಾರ್ಗ", detailsLabel: "ವಿವರಗಳು", kmUnit: "ಕಿ.ಮೀ", minsUnit: "ನಿಮಿಷ",
+    bloodGroup: "ರಕ್ತದ ಗುಂಪು", emergencyContact: "ತುರ್ತು ಸಂಪರ್ಕ",
+ 
+    hcDayClinic: "ಡೇ ಕ್ಲಿನಿಕ್ / ಹೊರರೋಗಿ ವಿಭಾಗ ಮಾತ್ರ", hcReportedBeds: "ವರದಿಯಾದ ಹಾಸಿಗೆಗಳು:", hcIcuStatus: "ಐಸಿಯು ಸ್ಥಿತಿ:",
+    hcIcuOpen: "ಐಸಿಯು ಖಾಲಿ ಇದೆ", hcFull: "ಭರ್ತಿಯಾಗಿದೆ", hcNA: "ಲಭ್ಯವಿಲ್ಲ", hcMore: "ಇನ್ನಷ್ಟು", hcUnknown: "ಗೊತ್ತಿಲ್ಲ",
+ 
+    fltClear: "ತೆರವುಗೊಳಿಸಿ", fltDetecting: "ಜಿಪಿಎಸ್ ಪತ್ತೆಹಚ್ಚಲಾಗುತ್ತಿದೆ...", fltGpsActive: "ಜಿಪಿಎಸ್ ಸ್ಥಳ ಸಕ್ರಿಯವಾಗಿದೆ",
+    fltUseGps: "ನನ್ನ ಜಿಪಿಎಸ್ ಸ್ಥಳ ಬಳಸಿ", fltSortName: "ಹೆಸರಿನ ಪ್ರಕಾರ ವಿಂಗಡಿಸಿ",
+ 
+    mapYourLocation: "ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಸ್ಥಳ", mapGpsActive: "ಜಿಪಿಎಸ್ ಸಕ್ರಿಯ", mapBedsReported: "ವರದಿಯಾದ ಹಾಸಿಗೆಗಳು ಲಭ್ಯ",
+    mapLegend: "ನಕ್ಷೆ ಸೂಚಿ", mapLegendEmergency: "24/7 ತುರ್ತು ಆಸ್ಪತ್ರೆ", mapLegendGeneral: "ಸಾಮಾನ್ಯ ಕ್ಲಿನಿಕ್ / ಆಸ್ಪತ್ರೆ",
+    mapLegendYou: "ನಿಮ್ಮ ಸ್ಥಳ", mapSelected: "ಆಯ್ದ ಸೌಲಭ್ಯ",
+    mapCalculating: "ವೇಗದ ತುರ್ತು ಮಾರ್ಗವನ್ನು ಲೆಕ್ಕಹಾಕಲಾಗುತ್ತಿದೆ...", mapDistance: "ದೂರ:", mapTransit: "ಅಂದಾಜು ಪ್ರಯಾಣ ಸಮಯ:",
+    mapEnableGps: "ಲೈವ್ ಮಾರ್ಗ ಮತ್ತು ಅವಧಿ ನೋಡಲು ಜಿಪಿಎಸ್ ಆನ್ ಮಾಡಿ.", mapExternal: "ಬಾಹ್ಯ ನಕ್ಷೆ", mapOffline: "ಆಫ್‌ಲೈನ್ ನಕ್ಷೆ ಮೋಡ್",
+ 
+    vaToggleTitle: "ಧ್ವನಿ ಉತ್ತರಗಳನ್ನು ಆನ್/ಆಫ್ ಮಾಡಿ", vaReadoutOn: "ಧ್ವನಿ ಓದು ಆನ್", vaMuted: "ಮ್ಯೂಟ್",
+    vaStopAria: "ಆಲಿಸುವುದನ್ನು ನಿಲ್ಲಿಸಿ", vaStartAria: "ಧ್ವನಿ ಹುಡುಕಾಟ ಪ್ರಾರಂಭಿಸಿ",
+    vaListening: "ಆಲಿಸಲಾಗುತ್ತಿದೆ... ನಿಮ್ಮ ಆರೋಗ್ಯ ಸಂಬಂಧಿತ ವಿನಂತಿಯನ್ನು ಹೇಳಿ", vaTapToSpeak: "ಮಾತನಾಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ", vaTrySaying: "ಹೀಗೆ ಹೇಳಿ ನೋಡಿ:",
+    vaRecognized: "ಗುರುತಿಸಿದ ಪ್ರಶ್ನೆ", vaIntent: "ಉದ್ದೇಶ ಅರ್ಥವಾಯಿತು", vaShowResults: "ಫಿಲ್ಟರ್ ಮಾಡಿದ ಆಸ್ಪತ್ರೆ ಫಲಿತಾಂಶಗಳನ್ನು ತೋರಿಸಿ",
+    vaQuick: "ತ್ವರಿತ ಸಲಹೆಗಳು:", vaPlaceholder: "ಅಥವಾ ನಿಮ್ಮ ತುರ್ತು ವಿನಂತಿಯನ್ನು ಇಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ...", vaSearch: "ಹುಡುಕಿ",
+    vaUnsupported: "ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಧ್ವನಿ ಗುರುತಿಸುವಿಕೆ ಬೆಂಬಲಿತವಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಕೆಳಗಿನ ಪಠ್ಯ ಇನ್‌ಪುಟ್ ಬಳಸಿ.",
+    vaVoiceError: "ಧ್ವನಿ ದೋಷ", vaTryAgain: "ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಕೆಳಗೆ ಟೈಪ್ ಮಾಡಿ.",
+    vaMicFailed: "ಮೈಕ್ರೊಫೋನ್ ಪ್ರವೇಶ ವಿಫಲವಾಗಿದೆ.", vaDefaultSample: "ಹತ್ತಿರದ ತುರ್ತು ಆಸ್ಪತ್ರೆಯನ್ನು ಹುಡುಕಿ",
+ 
+    sbOutdated: "ಹಳೆಯದು (>6 ಗಂ)", sbLimited: "ಸೀಮಿತ", sbUnavailable: "ಲಭ್ಯವಿಲ್ಲ",
+    sbVerified: "ಪರಿಶೀಲಿತ ಪಾಲುದಾರ", sbUnknown: "ಗೊತ್ತಿಲ್ಲ",
+ 
+    obSimulated: "ಸಿಮ್ಯುಲೇಟೆಡ್ ಆಫ್‌ಲೈನ್ ಮೋಡ್", obOffline: "ನೆಟ್‌ವರ್ಕ್ ಆಫ್‌ಲೈನ್",
+    obMessage: "ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿದ ಆಸ್ಪತ್ರೆಗಳು ಮತ್ತು ತುರ್ತು ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ಬಳಸಲಾಗುತ್ತಿದೆ. ದೂರಸ್ಥ ಅಧಿಸೂಚನೆಗಳು ಮತ್ತು ಲೈವ್ ಸಿಂಕ್‌ಗೆ ಇಂಟರ್ನೆಟ್ ಬೇಕು.",
+    obLastSynced: "ಕೊನೆಯ ಸಿಂಕ್:", obPendingOne: "ಬಾಕಿ ಅಪ್‌ಡೇಟ್", obPendingMany: "ಬಾಕಿ ಅಪ್‌ಡೇಟ್‌ಗಳು",
+    obResume: "ಆನ್‌ಲೈನ್‌ಗೆ ಮರಳಿ", obRetry: "ಸಂಪರ್ಕ ಮರುಪ್ರಯತ್ನಿಸಿ",
+ 
+    faTitle: "ಆಫ್‌ಲೈನ್ ತುರ್ತು ಪ್ರಥಮ ಚಿಕಿತ್ಸಾ ಮಾರ್ಗದರ್ಶಿಗಳು",
+    faIntro: "ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದೆಯೂ ಲಭ್ಯವಿರುವ ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿದ ಸೂಚನೆಗಳು. ತುರ್ತು ವಾಹನ ಬರುವವರೆಗೆ ಶಾಂತವಾಗಿರಿ ಮತ್ತು ಈ ತಕ್ಷಣದ ಸ್ಥಿರೀಕರಣ ಹಂತಗಳನ್ನು ಅನುಸರಿಸಿ.",
+    faCritical: "ನಿರ್ಣಾಯಕ ಹಂತ", faUrgent: "ತುರ್ತು ಕ್ರಮ",
+ 
+    ftBlurb: "ಆಫ್‌ಲೈನ್-ಮೊದಲ ತುರ್ತು ಆರೋಗ್ಯ ಸಮನ್ವಯ ವೇದಿಕೆ.", ftPwa: "ಆಫ್‌ಲೈನ್-ಮೊದಲ ಪ್ರೊಗ್ರೆಸಿವ್ ವೆಬ್ ಆ್ಯಪ್",
+    ftEmergencyCare: "ತುರ್ತು ಆರೈಕೆ", ftEmergencyLink: "ತುರ್ತು ಸಹಾಯ (112/108)",
+    ftClinical: "ಚಿಕಿತ್ಸಾ ಕಾರ್ಯಪ್ರವಾಹಗಳು", ftScan: "ರೋಗಿಯ ಕ್ಯೂಆರ್ ಟೋಕನ್ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ", ftRegister: "ಪ್ರಜ್ಞಾಹೀನ ರೋಗಿಯ ದಾಖಲಾತಿ",
+    ftAdmin: "ಆಸ್ಪತ್ರೆ ಹಾಸಿಗೆ ಮತ್ತು ಔಷಧಿ ನಿರ್ವಹಣೆ", ftSync: "ಆಫ್‌ಲೈನ್ ಸಿಂಕ್ ಮತ್ತು ಉಳಿಸಿದ ದಾಖಲೆಗಳು",
+    ftPrivacyTitle: "ಗೌಪ್ಯತೆ ಮತ್ತು ಹಕ್ಕುನಿರಾಕರಣೆ",
+    ftDisclaimer: "ಲೈಫ್-ಲಿಂಕ್ ವೃತ್ತಿಪರ ತುರ್ತು ಸೇವೆಗಳಿಗೆ ಪೂರಕವಾಗಿದೆ, ಬದಲಿಯಲ್ಲ. ಜೀವಕ್ಕೆ ಅಪಾಯಕಾರಿ ತುರ್ತು ಸ್ಥಿತಿಯಲ್ಲಿ ತಕ್ಷಣ ಸರ್ಕಾರಿ ಆಂಬ್ಯುಲೆನ್ಸ್ ಸೇವೆಗಳನ್ನು (108 / 112) ಸಂಪರ್ಕಿಸಿ.",
+    ftCharter: "ಸುರಕ್ಷತೆ ಮತ್ತು ಗೌಪ್ಯತೆ ಚಾರ್ಟರ್ ಓದಿ →", ftCopyright: "ಲೈಫ್-ಲಿಂಕ್ ತುರ್ತು ವೇದಿಕೆ. ಪ್ರಾತ್ಯಕ್ಷಿಕೆ ಮಾದರಿ.",
+    ftPrivacyPolicy: "ಗೌಪ್ಯತಾ ನೀತಿ", ftLangSettings: "ಭಾಷೆ ಮತ್ತು ಸೆಟ್ಟಿಂಗ್‌ಗಳು", ftDiagnostics: "ಆಫ್‌ಲೈನ್ ಡಯಾಗ್ನೋಸ್ಟಿಕ್ಸ್",
+ 
+    qrgConfirm: "ಈ ತುರ್ತು ಕ್ಯೂಆರ್ ಟೋಕನ್ ಅನ್ನು ರದ್ದುಗೊಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುತ್ತೀರಾ? ಈಗಾಗಲೇ ಮುದ್ರಿಸಿದ ಎಲ್ಲಾ ಕಾರ್ಡ್‌ಗಳು ತಕ್ಷಣ ಅಮಾನ್ಯವಾಗುತ್ತವೆ.",
+    qrgLoading: "ತುರ್ತು ಕ್ಯೂಆರ್ ವಿವರಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...", qrgBack: "ಪ್ರೊಫೈಲ್ ನಿರ್ವಹಣೆಗೆ ಹಿಂತಿರುಗಿ",
+    qrgBadge: "ತುರ್ತು ಗುರುತಿನ ಕಾರ್ಡ್", qrgTitle: "ತುರ್ತು ಕ್ಯೂಆರ್ ಪ್ರವೇಶ ಟೋಕನ್",
+    qrgSub: "ಈ ಕಾರ್ಡ್ ಅನ್ನು ಮುದ್ರಿಸಿ ನಿಮ್ಮ ಪರ್ಸ್, ಫೋನ್ ಲಾಕ್‌ಸ್ಕ್ರೀನ್ ಅಥವಾ ಹೆಲ್ಮೆಟ್‌ನಲ್ಲಿ ಇರಿಸಿ.",
+    qrgPrivacyTitle: "ಗೌಪ್ಯತೆ ರಕ್ಷಣೆಯ ಭರವಸೆ",
+    qrgPrivacyBody: "ಈ ಕ್ಯೂಆರ್ ಕೋಡ್‌ನಲ್ಲಿ ಯಾವುದೇ ವೈಯಕ್ತಿಕ ಆರೋಗ್ಯ ಗುರುತುಗಳು ಅಥವಾ ಕುಟುಂಬದ ಫೋನ್ ಸಂಖ್ಯೆಗಳು ಸಂಗ್ರಹವಾಗಿರುವುದಿಲ್ಲ. ಇದರಲ್ಲಿ ಸುರಕ್ಷಿತ ಕ್ರಿಪ್ಟೋಗ್ರಾಫಿಕ್ ಟೋಕನ್ ({token}) ಮಾತ್ರ ಇರುತ್ತದೆ, ಇದನ್ನು ಅಧಿಕೃತ ವೈದ್ಯಕೀಯ ಸಿಬ್ಬಂದಿ ದೃಢೀಕೃತ ಚಿಕಿತ್ಸಾ ದಾಖಲಾತಿಯ ಸಮಯದಲ್ಲಿ ಡಿಕೋಡ್ ಮಾಡುತ್ತಾರೆ.",
+    qrgCardHeader: "ಲೈಫ್-ಲಿಂಕ್ ತುರ್ತು ಕಾರ್ಡ್", qrgOfficial: "ಅಧಿಕೃತ ಟೋಕನ್", qrgAgeGender: "ವಯಸ್ಸು / ಲಿಂಗ", qrgYrs: "ವರ್ಷ",
+    qrgAllergy: "ಗಂಭೀರ ಅಲರ್ಜಿ ಎಚ್ಚರಿಕೆ", qrgScanWith: "ಲೈಫ್-ಲಿಂಕ್ ತುರ್ತು ಟರ್ಮಿನಲ್‌ನಿಂದ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ",
+    qrgStatus: "ಸ್ಥಿತಿ: ಪರಿಶೀಲಿಸಿ ಸಕ್ರಿಯ", qrgRevoked: "ಹೊಸ ಟೋಕನ್ ರಚಿಸಲಾಗಿದೆ! ಹಳೆಯ ಕ್ಯೂಆರ್ ಕಾರ್ಡ್‌ಗಳನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ.",
+    qrgPrint: "ಕಾರ್ಡ್ ಮುದ್ರಿಸಿ", qrgCopied: "ಟೋಕನ್ ನಕಲಿಸಲಾಗಿದೆ!", qrgCopy: "ಟೋಕನ್ ನಕಲಿಸಿ", qrgRevoke: "ರದ್ದುಗೊಳಿಸಿ ಮತ್ತು ಕ್ಯೂಆರ್ ಮರುರಚಿಸಿ",
+ 
+    qrsBadge: "ತುರ್ತು ಸಿಬ್ಬಂದಿ ಟರ್ಮಿನಲ್", qrsTitle: "ತುರ್ತು ರೋಗಿ ಕ್ಯೂಆರ್ ಸ್ಕ್ಯಾನರ್",
+    qrsSub: "ಚಿಕಿತ್ಸಾ ದಾಖಲಾತಿಯ ಸಮಯದಲ್ಲಿ ರೋಗಿಯ ತುರ್ತು ಟೋಕನ್‌ಗಳನ್ನು ಡಿಕೋಡ್ ಮಾಡುವ ಅಧಿಕೃತ ಸ್ಕ್ಯಾನರ್.",
+    qrsUnidentified: "ಅಪರಿಚಿತ ರೋಗಿ ದಾಖಲಾತಿ", qrsOperator: "ನಿರ್ವಾಹಕ:", qrsDefaultOperator: "ಅಧಿಕೃತ ತುರ್ತು ಅಧಿಕಾರಿ",
+    qrsAuthTerminal: "ಅಧಿಕೃತ ಟರ್ಮಿನಲ್", qrsStopCamera: "ಕ್ಯಾಮೆರಾ ನಿಲ್ಲಿಸಿ",
+    qrsPoint: "ರೋಗಿಯ ಮುದ್ರಿತ ಅಥವಾ ಲಾಕ್‌ಸ್ಕ್ರೀನ್ ಕ್ಯೂಆರ್ ಕಾರ್ಡ್‌ನತ್ತ ಕ್ಯಾಮೆರಾ ಹಿಡಿಯಿರಿ", qrsStartCamera: "ಕ್ಯಾಮೆರಾ ಪ್ರಾರಂಭಿಸಿ",
+    qrsManual: "ಕೈಯಾರೆ ಟೋಕನ್ ನಮೂದು / ಬಾರ್‌ಕೋಡ್ ಸ್ಕ್ಯಾನರ್ ಇನ್‌ಪುಟ್", qrsDecode: "ಡಿಕೋಡ್ ಮಾಡಿ",
+    qrsUnrecognized: "ಗುರುತಿಸಲಾಗದ ಕ್ಯೂಆರ್ ಟೋಕನ್.", qrsVerified: "ಪರಿಶೀಲಿತ ಗುರುತು ಪಡೆಯಲಾಗಿದೆ",
+    qrsActive: "ಸಕ್ರಿಯ ಪ್ರೊಫೈಲ್", qrsPatientName: "ರೋಗಿಯ ಹೆಸರು", qrsSecondary: "ಎರಡನೇ ಸಂಪರ್ಕ",
+    qrsAllergyWarn: "ಗಂಭೀರ ಅಲರ್ಜಿ ಎಚ್ಚರಿಕೆ", qrsConditions: "ವೈದ್ಯಕೀಯ ಸ್ಥಿತಿಗಳು", qrsLink: "ಘಟನೆ ದಾಖಲಾತಿಗೆ ಲಿಂಕ್ ಮಾಡಿ",
+    qrcScanning: "ಸ್ಕ್ಯಾನ್ ಆಗುತ್ತಿದೆ... ಕ್ಯೂಆರ್ ಕೋಡ್ ಅನ್ನು ಕ್ಯಾಮೆರಾದಿಂದ 15-30 ಸೆಂ.ಮೀ ದೂರದಲ್ಲಿ ಸ್ಥಿರವಾಗಿ ಹಿಡಿಯಿರಿ.",
+    qrcErrorPrefix: "ಕ್ಯಾಮೆರಾ ದೋಷ", qrcErrorHelp: "ವಿಳಾಸ ಪಟ್ಟಿಯಲ್ಲಿ ಕ್ಯಾಮೆರಾ ಪ್ರವೇಶಕ್ಕೆ ಅನುಮತಿಸಿ, ಅಥವಾ ಕೆಳಗೆ ಕೈಯಾರೆ ನಮೂದಿಸಿ.",
+    qrcStartFail: "ಕ್ಯಾಮೆರಾ ಪ್ರಾರಂಭಿಸಲಾಗಲಿಲ್ಲ.",
+  },
+ 
+  hi: {
+    callLabel: "कॉल करें", routeLabel: "रूट", detailsLabel: "विवरण", kmUnit: "किमी", minsUnit: "मिनट",
+    bloodGroup: "रक्त समूह", emergencyContact: "आपातकालीन संपर्क",
+ 
+    hcDayClinic: "डे क्लिनिक / केवल ओपीडी", hcReportedBeds: "रिपोर्ट किए गए बेड:", hcIcuStatus: "आईसीयू स्थिति:",
+    hcIcuOpen: "आईसीयू खाली", hcFull: "भरा हुआ", hcNA: "उपलब्ध नहीं", hcMore: "और", hcUnknown: "अज्ञात",
+ 
+    fltClear: "साफ़ करें", fltDetecting: "जीपीएस पता लगाया जा रहा है...", fltGpsActive: "जीपीएस लोकेशन सक्रिय",
+    fltUseGps: "मेरी जीपीएस लोकेशन का उपयोग करें", fltSortName: "नाम के अनुसार क्रमबद्ध करें",
+ 
+    mapYourLocation: "आपकी वर्तमान लोकेशन", mapGpsActive: "जीपीएस सक्रिय", mapBedsReported: "रिपोर्ट किए गए बेड उपलब्ध",
+    mapLegend: "मैप संकेत", mapLegendEmergency: "24/7 आपातकालीन अस्पताल", mapLegendGeneral: "सामान्य क्लिनिक / अस्पताल",
+    mapLegendYou: "आपकी लोकेशन", mapSelected: "चयनित सुविधा",
+    mapCalculating: "सबसे तेज़ आपातकालीन मार्ग की गणना हो रही है...", mapDistance: "दूरी:", mapTransit: "अनुमानित यात्रा समय:",
+    mapEnableGps: "लाइव रूट और समय देखने के लिए जीपीएस चालू करें।", mapExternal: "बाहरी मैप", mapOffline: "ऑफलाइन मैप मोड",
+ 
+    vaToggleTitle: "बोले गए उत्तर चालू/बंद करें", vaReadoutOn: "वॉइस रीडआउट चालू", vaMuted: "म्यूट",
+    vaStopAria: "सुनना बंद करें", vaStartAria: "वॉइस खोज शुरू करें",
+    vaListening: "सुन रहा है... अपना स्वास्थ्य अनुरोध बोलें", vaTapToSpeak: "बोलने के लिए टैप करें", vaTrySaying: "ऐसा बोलकर देखें:",
+    vaRecognized: "पहचाना गया अनुरोध", vaIntent: "आशय समझ लिया गया", vaShowResults: "फ़िल्टर किए गए अस्पताल परिणाम दिखाएं",
+    vaQuick: "त्वरित सुझाव:", vaPlaceholder: "या अपना आपातकालीन अनुरोध यहां लिखें...", vaSearch: "खोजें",
+    vaUnsupported: "इस ब्राउज़र में वॉइस रिकग्निशन समर्थित नहीं है। कृपया नीचे टेक्स्ट इनपुट का उपयोग करें।",
+    vaVoiceError: "वॉइस त्रुटि", vaTryAgain: "कृपया पुनः प्रयास करें या नीचे लिखें।",
+    vaMicFailed: "माइक्रोफोन एक्सेस विफल रहा।", vaDefaultSample: "नजदीकी आपातकालीन अस्पताल खोजें",
+ 
+    sbOutdated: "पुराना (>6 घंटे)", sbLimited: "सीमित", sbUnavailable: "अनुपलब्ध",
+    sbVerified: "सत्यापित भागीदार", sbUnknown: "अज्ञात",
+ 
+    obSimulated: "सिम्युलेटेड ऑफलाइन मोड", obOffline: "नेटवर्क ऑफलाइन",
+    obMessage: "स्थानीय रूप से सहेजे गए अस्पताल और आपातकालीन गाइड दिखाए जा रहे हैं। रिमोट सूचनाओं और लाइव सिंक के लिए कनेक्शन आवश्यक है।",
+    obLastSynced: "अंतिम सिंक:", obPendingOne: "लंबित अपडेट", obPendingMany: "लंबित अपडेट",
+    obResume: "ऑनलाइन फिर शुरू करें", obRetry: "कनेक्शन पुनः आज़माएं",
+ 
+    faTitle: "ऑफलाइन आपातकालीन प्राथमिक उपचार गाइड",
+    faIntro: "इंटरनेट के बिना उपलब्ध स्थानीय रूप से सहेजे गए निर्देश। आपातकालीन वाहन के आने तक शांत रहें और ये तात्कालिक स्थिरीकरण कदम अपनाएं।",
+    faCritical: "महत्वपूर्ण कदम", faUrgent: "तत्काल कार्रवाई",
+ 
+    ftBlurb: "ऑफलाइन-प्रथम आपातकालीन स्वास्थ्य समन्वय मंच।", ftPwa: "ऑफलाइन-प्रथम प्रोग्रेसिव वेब ऐप",
+    ftEmergencyCare: "आपातकालीन देखभाल", ftEmergencyLink: "आपातकालीन सहायता (112/108)",
+    ftClinical: "क्लिनिकल कार्यप्रवाह", ftScan: "मरीज का क्यूआर टोकन स्कैन करें", ftRegister: "अचेत मरीज का पंजीकरण",
+    ftAdmin: "अस्पताल बेड और दवा प्रबंधन", ftSync: "ऑफलाइन सिंक और सहेजे गए रिकॉर्ड",
+    ftPrivacyTitle: "गोपनीयता और अस्वीकरण",
+    ftDisclaimer: "लाइफ-लिंक पेशेवर आपातकालीन सेवाओं का पूरक है, विकल्प नहीं। जानलेवा आपातकाल में तुरंत सरकारी एम्बुलेंस सेवाओं (108 / 112) से संपर्क करें।",
+    ftCharter: "सुरक्षा और गोपनीयता चार्टर पढ़ें →", ftCopyright: "लाइफ-लिंक आपातकालीन मंच। प्रदर्शन प्रोटोटाइप।",
+    ftPrivacyPolicy: "गोपनीयता नीति", ftLangSettings: "भाषा और सेटिंग्स", ftDiagnostics: "ऑफलाइन डायग्नोस्टिक्स",
+ 
+    qrgConfirm: "क्या आप इस आपातकालीन क्यूआर टोकन को रद्द करना चाहते हैं? पहले से छपे सभी कार्ड तुरंत अमान्य हो जाएंगे।",
+    qrgLoading: "आपातकालीन क्यूआर विवरण लोड हो रहे हैं...", qrgBack: "प्रोफाइल प्रबंधन पर वापस जाएं",
+    qrgBadge: "आपातकालीन पहचान कार्ड", qrgTitle: "आपातकालीन क्यूआर एक्सेस टोकन",
+    qrgSub: "इस कार्ड को प्रिंट करें या अपने बटुए, फोन लॉकस्क्रीन या हेलमेट में रखें।",
+    qrgPrivacyTitle: "गोपनीयता सुरक्षा गारंटी",
+    qrgPrivacyBody: "इस क्यूआर कोड में कोई व्यक्तिगत स्वास्थ्य पहचान या परिवार के फोन नंबर संग्रहीत नहीं होते। इसमें केवल एक सुरक्षित क्रिप्टोग्राफिक टोकन ({token}) होता है, जिसे अधिकृत चिकित्सा कर्मचारी प्रमाणित क्लिनिकल प्रवेश के समय डिकोड करते हैं।",
+    qrgCardHeader: "लाइफ-लिंक आपातकालीन कार्ड", qrgOfficial: "आधिकारिक टोकन", qrgAgeGender: "आयु / लिंग", qrgYrs: "वर्ष",
+    qrgAllergy: "गंभीर एलर्जी चेतावनी", qrgScanWith: "लाइफ-लिंक आपातकालीन टर्मिनल से स्कैन करें",
+    qrgStatus: "स्थिति: सत्यापित सक्रिय", qrgRevoked: "नया टोकन बन गया है! पुराने क्यूआर कार्ड रद्द कर दिए गए हैं।",
+    qrgPrint: "कार्ड प्रिंट करें", qrgCopied: "टोकन कॉपी हो गया!", qrgCopy: "टोकन कॉपी करें", qrgRevoke: "रद्द करें और क्यूआर दोबारा बनाएं",
+ 
+    qrsBadge: "आपातकालीन स्टाफ टर्मिनल", qrsTitle: "आपातकालीन मरीज क्यूआर स्कैनर",
+    qrsSub: "क्लिनिकल प्रवेश के दौरान मरीज के आपातकालीन टोकन डिकोड करने वाला अधिकृत स्कैनर।",
+    qrsUnidentified: "अज्ञात मरीज प्रवेश", qrsOperator: "ऑपरेटर:", qrsDefaultOperator: "अधिकृत आपातकालीन अधिकारी",
+    qrsAuthTerminal: "अधिकृत टर्मिनल", qrsStopCamera: "कैमरा बंद करें",
+    qrsPoint: "मरीज के प्रिंटेड या लॉकस्क्रीन क्यूआर कार्ड की ओर कैमरा करें", qrsStartCamera: "कैमरा शुरू करें",
+    qrsManual: "मैन्युअल टोकन दर्ज करें / बारकोड स्कैनर इनपुट", qrsDecode: "डिकोड करें",
+    qrsUnrecognized: "अपरिचित क्यूआर टोकन।", qrsVerified: "सत्यापित पहचान प्राप्त हुई",
+    qrsActive: "सक्रिय प्रोफाइल", qrsPatientName: "मरीज का नाम", qrsSecondary: "द्वितीयक संपर्क",
+    qrsAllergyWarn: "गंभीर एलर्जी चेतावनी", qrsConditions: "चिकित्सीय स्थितियां", qrsLink: "घटना प्रवेश से जोड़ें",
+    qrcScanning: "स्कैन हो रहा है... क्यूआर कोड को कैमरे से 15-30 सेमी दूर स्थिर पकड़ें।",
+    qrcErrorPrefix: "कैमरा त्रुटि", qrcErrorHelp: "एड्रेस बार में कैमरा एक्सेस की अनुमति दें, या नीचे मैन्युअल रूप से दर्ज करें।",
+    qrcStartFail: "कैमरा शुरू नहीं हो सका।",
+  },
+};
+ 

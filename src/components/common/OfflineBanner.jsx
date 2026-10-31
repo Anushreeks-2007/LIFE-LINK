@@ -3,13 +3,13 @@ import { useOffline } from '../../contexts/OfflineContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { WifiOff, RefreshCw } from 'lucide-react';
 import { formatRelativeTime } from '../../utils/formatters';
-
+ 
 export function OfflineBanner() {
   const { isOnline, simulateOffline, toggleSimulatedOffline, pendingQueueCount, lastSyncTime, triggerSync, syncStatus } = useOffline();
   const { t } = useLanguage();
-
+ 
   if (isOnline) return null;
-
+ 
   return (
     <div className="bg-amber-500 text-slate-950 px-4 py-2 border-b border-amber-600 shadow-sm offline-banner-pattern">
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
@@ -25,20 +25,20 @@ export function OfflineBanner() {
             <span className="text-slate-900 font-medium">{t('obMessage')}</span>
           </div>
         </div>
-
+ 
         <div className="flex items-center gap-2">
           {lastSyncTime && (
             <span className="text-slate-800 text-[11px] hidden md:inline">
               {t('obLastSynced')} {formatRelativeTime(lastSyncTime)}
             </span>
           )}
-
+ 
           {pendingQueueCount > 0 && (
             <span className="bg-slate-950 text-amber-300 px-2 py-0.5 rounded font-bold text-[11px]">
               {pendingQueueCount} {pendingQueueCount > 1 ? t('obPendingMany') : t('obPendingOne')}
             </span>
           )}
-
+ 
           {simulateOffline ? (
             <button
               type="button"
@@ -63,3 +63,4 @@ export function OfflineBanner() {
     </div>
   );
 }
+ 

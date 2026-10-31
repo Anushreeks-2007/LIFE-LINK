@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { OFFLINE_FIRST_AID_GUIDES } from '../../utils/syntheticData';
 import { ChevronDown, ChevronUp, HeartPulse } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
-
+ 
 export function FirstAidGuide() {
   const { t, language } = useLanguage();
   const [openGuideId, setOpenGuideId] = useState('fa-1');
-
+ 
   const toggleGuide = (id) => {
     setOpenGuideId((prev) => (prev === id ? null : id));
   };
-
+ 
   const getUrgencyBadge = (urgency) => {
     if (urgency === 'CRITICAL') {
       return (
@@ -25,7 +25,7 @@ export function FirstAidGuide() {
       </span>
     );
   };
-
+ 
   return (
     <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-2">
@@ -33,7 +33,7 @@ export function FirstAidGuide() {
         <h3 className="text-base sm:text-lg font-extrabold text-slate-900">{t('faTitle')}</h3>
       </div>
       <p className="text-xs text-slate-500 mb-5 leading-relaxed">{t('faIntro')}</p>
-
+ 
       <div className="space-y-3">
         {OFFLINE_FIRST_AID_GUIDES.map((guide) => {
           const isOpen = openGuideId === guide.id;
@@ -63,7 +63,7 @@ export function FirstAidGuide() {
                   <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
                 )}
               </button>
-
+ 
               {isOpen && (
                 <div className="px-4 pb-4 pt-1 border-t border-slate-100 text-xs">
                   <ol className="space-y-2 list-decimal list-inside text-slate-700 leading-relaxed font-medium">
@@ -82,3 +82,4 @@ export function FirstAidGuide() {
     </div>
   );
 }
+ 
