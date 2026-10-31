@@ -43,28 +43,21 @@ export function EmergencyProfilePage() {
   };
 
   // Load a profile only if the user has saved one before
-  useEffect(() => {
-    dbGetProfileById(PROFILE_ID).then((saved) => {
-      if (saved) {
-        setProfile({ ...EMPTY_PROFILE, ...saved });
-      }
-    });
-  }, []);
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const updated = {
-      ...profile,
-      id: profile.id || PROFILE_ID,
-      qr_token: profile.qr_token || 'LL-TOKEN-8F492E-SECURE',
-      is_revoked: false,
-    };
-    await dbSaveProfile(updated);
-    setProfile(updated);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+  e.preventDefault();
+  const existing = await dbGetProfileById(PROFILE_ID);
+  const updated = {
+    ...profile,
+    id: PROFILE_ID,
+    qr_token: existing?.qr_token || 'LL-TOKEN-8F492E-SECURE',
+    is_revoked: false,
   };
-
+  await dbSaveProfile(updated);
+  setProfile(EMPTY_PROFILE);   // clear the form after saving
+  setSaveSuccess(true);
+  setTimeout(() => setSaveSuccess(false), 3000);
+};
+  
   const inputCls =
     'w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-600';
 
