@@ -7,10 +7,10 @@ import { OfflineProvider } from './contexts/OfflineContext';
 // Common Components
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
+import { DemoBanner } from './components/common/DemoBanner';
 import { OfflineBanner } from './components/common/OfflineBanner';
-import { RequireAuth } from './components/common/RequireAuth';
 
-// Pages
+// 20 Required Pages
 import { LandingPage } from './pages/LandingPage';
 import { HospitalDiscoveryPage } from './pages/HospitalDiscoveryPage';
 import { HospitalDetailsPage } from './pages/HospitalDetailsPage';
@@ -31,11 +31,6 @@ import { MedicineInventoryManagementPage } from './pages/MedicineInventoryManage
 import { OfflineStatusPage } from './pages/OfflineStatusPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { PrivacyHelpPage } from './pages/PrivacyHelpPage';
-import ResetPasswordPage from './pages/ResetPasswordPage';
-import ChangePasswordPage from './pages/ChangePasswordPage';
-import { RoleSelectPage } from './pages/RoleSelectPage';
-import { RoleLoginPage } from './pages/RoleLoginPage';
-
 
 export default function App() {
   return (
@@ -44,67 +39,58 @@ export default function App() {
         <OfflineProvider>
           <BrowserRouter>
             <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans selection:bg-teal-500 selection:text-white">
-              {/* The old <DemoBanner /> role switcher is removed: roles now come from the sign-in page. */}
+              {/* Demonstration Top Banner */}
+              <DemoBanner />
+
+              {/* Dynamic Offline / Cached Data Banner */}
               <OfflineBanner />
+
+              {/* Responsive Header Navigation */}
               <Navbar />
 
+              {/* Main Content Viewport */}
               <main className="flex-1">
                 <Routes>
-                  {/* Public */}
+                  {/* Public & Discovery */}
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/hospitals" element={<HospitalDiscoveryPage />} />
+                  <Route path="/hospitals/:id" element={<HospitalDetailsPage />} />
+                  <Route path="/map" element={<InteractiveHospitalMapPage />} />
+                  <Route path="/voice-assistant" element={<VoiceAssistantPage />} />
+                  <Route path="/emergency" element={<EmergencyAssistancePage />} />
+                  
+                  {/* Authentication & User Profile */}
                   <Route path="/auth" element={<AuthPage />} />
-                  <Route path="/select-role" element={<RoleSelectPage />} />
-                  <Route path="/login/:role" element={<RoleLoginPage />} />
-                  <Route path="/reset-password" element={<ResetPasswordPage />} />
+                  <Route path="/profile" element={<EmergencyProfilePage />} />
+                  <Route path="/profile/qr" element={<QRCodeGenerationPage />} />
+
+                  {/* Clinical Emergency Staff Workflows */}
+                  <Route path="/staff/scan" element={<QRScanningPage />} />
+                  <Route path="/staff/unidentified-patient" element={<UnidentifiedPatientPage />} />
+                  <Route path="/patients/:id" element={<EmergencyPatientDetailsPage />} />
+                  <Route path="/patients/:id/transfer" element={<PatientTransferPage />} />
+                  <Route path="/patients/:id/family-contact" element={<FamilyNotificationPage />} />
+
+                  {/* Hospital Administration */}
+                  <Route path="/admin" element={<HospitalAdminDashboard />} />
+                  <Route path="/admin/beds" element={<BedAvailabilityManagementPage />} />
+                  <Route path="/admin/medicines" element={<MedicineInventoryManagementPage />} />
+
+                  {/* Offline, Preferences & Privacy */}
+                  <Route path="/offline-status" element={<OfflineStatusPage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
                   <Route path="/privacy-help" element={<PrivacyHelpPage />} />
 
-                  {/* Any signed-in user */}
-                  <Route element={<RequireAuth />}>
-                    <Route path="/" element={<LandingPage />} />
-                    <Route path="/hospitals" element={<HospitalDiscoveryPage />} />
-                    <Route path="/hospitals/:id" element={<HospitalDetailsPage />} />
-                    <Route path="/map" element={<InteractiveHospitalMapPage />} />
-                    <Route path="/voice-assistant" element={<VoiceAssistantPage />} />
-                    <Route path="/emergency" element={<EmergencyAssistancePage />} />
-                    <Route path="/offline-status" element={<OfflineStatusPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
-                    <Route path="/change-password" element={<ChangePasswordPage />} />
-                  </Route>
-
-                  {/* Citizen only */}
-                  <Route element={<RequireAuth roles={['citizen']} />}>
-                    <Route path="/profile" element={<EmergencyProfilePage />} />
-                    <Route path="/profile/qr" element={<QRCodeGenerationPage />} />
-                  </Route>
-
-                  {/* ER staff only */}
-                  <Route element={<RequireAuth roles={['staff']} />}>
-                    <Route path="/staff/scan" element={<QRScanningPage />} />
-                    <Route path="/staff/unidentified-patient" element={<UnidentifiedPatientPage />} />
-                    <Route path="/patients/:id" element={<EmergencyPatientDetailsPage />} />
-                    <Route path="/patients/:id/transfer" element={<PatientTransferPage />} />
-                    <Route path="/patients/:id/family-contact" element={<FamilyNotificationPage />} />
-                  </Route>
-
-                  {/* Hospital admin only */}
-                  <Route element={<RequireAuth roles={['admin']} />}>
-                    <Route path="/admin" element={<HospitalAdminDashboard />} />
-                    <Route path="/admin/beds" element={<BedAvailabilityManagementPage />} />
-                    <Route path="/admin/medicines" element={<MedicineInventoryManagementPage />} />
-                  </Route>
-
+                  {/* Fallback to Home */}
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </main>
 
+              {/* Global Footer */}
               <Footer />
             </div>
           </BrowserRouter>
-        
-        <main className="flex-1">
-          <ErrorBoundary>
-            <Routes> ... </Routes>
-          </ErrorBoundary>
-        </main>
+        </OfflineProvider>
       </AuthProvider>
     </LanguageProvider>
   );
