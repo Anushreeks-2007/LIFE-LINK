@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Activity, ShieldCheck, Heart, PhoneCall, Wifi, Lock } from 'lucide-react';
+import { Activity, PhoneCall, Wifi, Lock } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 export function Footer() {
@@ -16,99 +16,61 @@ export function Footer() {
               <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white">
                 <Activity className="w-5 h-5 stroke-[2.5]" />
               </div>
-              <span className="font-extrabold text-base text-white tracking-tight">
-                LIFE-LINK
-              </span>
+              <span className="font-extrabold text-base text-white tracking-tight">LIFE-LINK</span>
             </div>
             <p className="text-slate-400 text-xs leading-relaxed">
-              Connecting Lives, Saving Time. Offline-first emergency healthcare coordination platform.
+              {t('tagline')} {t('ftBlurb')}
             </p>
             <div className="flex items-center gap-2 pt-1 text-[11px] text-teal-400">
               <Wifi className="w-3.5 h-3.5" />
-              <span>Offline-First Progressive Web App</span>
+              <span>{t('ftPwa')}</span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-2">
-            <h4 className="text-white font-bold uppercase tracking-wider text-[11px]">
-              Emergency Care
-            </h4>
+            <h4 className="text-white font-bold uppercase tracking-wider text-[11px]">{t('ftEmergencyCare')}</h4>
             <ul className="space-y-1.5">
               <li>
                 <Link to="/emergency" className="text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1">
-                  <PhoneCall className="w-3 h-3" /> Emergency Assistance (112/108)
+                  <PhoneCall className="w-3 h-3" /> {t('ftEmergencyLink')}
                 </Link>
               </li>
-              <li>
-                <Link to="/hospitals" className="hover:text-white transition">
-                  {t('navHospitals')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/map" className="hover:text-white transition">
-                  {t('navMap')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/voice-assistant" className="hover:text-white transition">
-                  {t('navVoice')}
-                </Link>
-              </li>
+              <li><Link to="/hospitals" className="hover:text-white transition">{t('navHospitals')}</Link></li>
+              <li><Link to="/map" className="hover:text-white transition">{t('navMap')}</Link></li>
+              <li><Link to="/voice-assistant" className="hover:text-white transition">{t('navVoice')}</Link></li>
             </ul>
           </div>
 
           {/* Clinical Workflows */}
           <div className="space-y-2">
-            <h4 className="text-white font-bold uppercase tracking-wider text-[11px]">
-              Clinical Workflows
-            </h4>
+            <h4 className="text-white font-bold uppercase tracking-wider text-[11px]">{t('ftClinical')}</h4>
             <ul className="space-y-1.5">
-              <li>
-                <Link to="/staff/scan" className="hover:text-white transition">
-                  Scan Patient QR Token
-                </Link>
-              </li>
-              <li>
-                <Link to="/staff/unidentified-patient" className="hover:text-white transition">
-                  Register Unconscious Intake
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin" className="hover:text-white transition">
-                  Hospital Bed & Medicine Admin
-                </Link>
-              </li>
-              <li>
-                <Link to="/offline-status" className="hover:text-white transition">
-                  Offline Sync & Cached Records
-                </Link>
-              </li>
+              <li><Link to="/staff/scan" className="hover:text-white transition">{t('ftScan')}</Link></li>
+              <li><Link to="/staff/unidentified-patient" className="hover:text-white transition">{t('ftRegister')}</Link></li>
+              <li><Link to="/admin" className="hover:text-white transition">{t('ftAdmin')}</Link></li>
+              <li><Link to="/offline-status" className="hover:text-white transition">{t('ftSync')}</Link></li>
             </ul>
           </div>
 
           {/* Privacy & Disclaimer */}
           <div className="space-y-2">
             <h4 className="text-white font-bold uppercase tracking-wider text-[11px] flex items-center gap-1">
-              <Lock className="w-3.5 h-3.5 text-teal-400" /> Privacy & Disclaimer
+              <Lock className="w-3.5 h-3.5 text-teal-400" /> {t('ftPrivacyTitle')}
             </h4>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
-              LIFE-LINK complements rather than replaces professional emergency services. In acute life-threatening emergencies, contact government ambulance services (108 / 112) immediately.
-            </p>
+            <p className="text-[11px] text-slate-400 leading-relaxed">{t('ftDisclaimer')}</p>
             <div className="pt-1">
-              <Link to="/privacy-help" className="text-teal-400 hover:underline text-[11px]">
-                Read Security & Privacy Charter →
-              </Link>
+              <Link to="/privacy-help" className="text-teal-400 hover:underline text-[11px]">{t('ftCharter')}</Link>
             </div>
           </div>
         </div>
 
         <div className="border-t border-slate-800 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
-          <p>© {new Date().getFullYear()} LIFE-LINK Emergency Platform. Demonstration Prototype.</p>
+          <p>© {new Date().getFullYear()} {t('ftCopyright')}</p>
           <div className="flex items-center gap-4">
-            <Link to="/privacy-help" className="hover:text-slate-300">Privacy Policy</Link>
-            <Link to="/settings" className="hover:text-slate-300">Language & Settings</Link>
-            <Link to="/offline-status" className="hover:text-slate-300">Offline Diagnostics</Link>
+            <Link to="/privacy-help" className="hover:text-slate-300">{t('ftPrivacyPolicy')}</Link>
+            <Link to="/settings" className="hover:text-slate-300">{t('ftLangSettings')}</Link>
+            <Link to="/offline-status" className="hover:text-slate-300">{t('ftDiagnostics')}</Link>
           </div>
         </div>
       </div>

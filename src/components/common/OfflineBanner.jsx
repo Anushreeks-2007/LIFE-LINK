@@ -1,7 +1,7 @@
 import React from 'react';
 import { useOffline } from '../../contexts/OfflineContext';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { WifiOff, AlertTriangle, RefreshCw } from 'lucide-react';
+import { WifiOff, RefreshCw } from 'lucide-react';
 import { formatRelativeTime } from '../../utils/formatters';
 
 export function OfflineBanner() {
@@ -19,25 +19,23 @@ export function OfflineBanner() {
           </span>
           <div>
             <span className="font-bold uppercase tracking-wide">
-              {simulateOffline ? 'Simulated Offline Mode' : 'Network Offline'}
+              {simulateOffline ? t('obSimulated') : t('obOffline')}
             </span>
             <span className="mx-2 hidden sm:inline">•</span>
-            <span className="text-slate-900 font-medium">
-              Accessing locally cached hospitals & emergency guides. Remote notifications & live sync require connectivity.
-            </span>
+            <span className="text-slate-900 font-medium">{t('obMessage')}</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           {lastSyncTime && (
             <span className="text-slate-800 text-[11px] hidden md:inline">
-              Last synced: {formatRelativeTime(lastSyncTime)}
+              {t('obLastSynced')} {formatRelativeTime(lastSyncTime)}
             </span>
           )}
 
           {pendingQueueCount > 0 && (
             <span className="bg-slate-950 text-amber-300 px-2 py-0.5 rounded font-bold text-[11px]">
-              {pendingQueueCount} Pending Update{pendingQueueCount > 1 ? 's' : ''}
+              {pendingQueueCount} {pendingQueueCount > 1 ? t('obPendingMany') : t('obPendingOne')}
             </span>
           )}
 
@@ -47,7 +45,7 @@ export function OfflineBanner() {
               onClick={toggleSimulatedOffline}
               className="bg-slate-950 hover:bg-slate-800 text-white px-2.5 py-1 rounded font-semibold text-xs transition"
             >
-              Resume Online
+              {t('obResume')}
             </button>
           ) : (
             <button
@@ -57,7 +55,7 @@ export function OfflineBanner() {
               className="inline-flex items-center gap-1 bg-slate-950 hover:bg-slate-800 text-white px-2.5 py-1 rounded font-semibold text-xs transition"
             >
               <RefreshCw className={`w-3 h-3 ${syncStatus === 'syncing' ? 'animate-spin' : ''}`} />
-              Retry Connection
+              {t('obRetry')}
             </button>
           )}
         </div>

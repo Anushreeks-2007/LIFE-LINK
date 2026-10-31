@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export function QRCameraScanner({ onScan }) {
+  const { t } = useLanguage();
   const onScanRef = useRef(onScan);
   onScanRef.current = onScan;
   const handledRef = useRef(false);
   const [error, setError] = useState(null);
   const [active, setActive] = useState(false);
+  // Keep the latest fallback text without restarting the camera when the language changes.
+  const startFailRef = useRef(t('qrcStartFail'));
+  startFailRef.current = t('qrcStartFail');
 
   useEffect(() => {
     const scanner = new Html5Qrcode('qr-camera-region', {
@@ -38,9 +43,7 @@ export function QRCameraScanner({ onScan }) {
           if (cancelled) stopScanner();
         })
         .catch((err) => {
-          setError(
-            typeof err === 'string' ? err : err?.message || 'Could not start camera.'
-          );
+          setError(typeof err === 'string' ? err : err?.message || startFailRef.current);
         });
     }, 100);
 
@@ -53,16 +56,14 @@ export function QRCameraScanner({ onScan }) {
 
   return (
     <div className="w-full flex flex-col items-center">
-            <style>{`#qr-camera-region video { transform: scaleX(-1); }`}</style>
+      <style>{`#qr-camera-region video { transform: scaleX(-1); }`}</style>
       <div id="qr-camera-region" style={{ width: '100%', maxWidth: 480 }} />
       {active && !error && (
-        <p className="text-emerald-300 text-xs mt-2 px-4 text-center">
-          Scanning... hold the QR code steady, 15-30 cm from the camera.
-        </p>
+        <p className="text-emerald-300 text-xs mt-2 px-4 text-center">{t('qrcScanning')}</p>
       )}
       {error && (
         <p className="text-rose-400 text-xs mt-2 px-4 text-center">
-          Camera error: {error}. Allow camera access in the address bar, or use manual entry below.
+          {t('qrcErrorPrefix')}: {error}. {t('qrcErrorHelp')}
         </p>
       )}
     </div>
