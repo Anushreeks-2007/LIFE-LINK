@@ -1,3 +1,5 @@
+import { componentTranslations } from './translationsComponents';
+import { pageTranslations } from './pageTranslations';
 // Extra keys for the role screens, auth pages, change-password page and navbar.
 // Merged into `translations` at the bottom of translations.js.
 export const extraTranslations = {
@@ -281,3 +283,7 @@ export const extraTranslations = {
     pwRuleShort: "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए, जिसमें एक अक्षर और एक अंक हो।",
   },
 };
+
+Object.keys(pageTranslations).forEach((lang) => {
+  extraTranslations[lang] = { ...extraTranslations[lang], ...pageTranslations[lang] };
+});
