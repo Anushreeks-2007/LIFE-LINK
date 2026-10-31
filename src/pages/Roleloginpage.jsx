@@ -2,15 +2,18 @@ import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { User, Lock, Eye, EyeOff, AlertCircle, Loader2, Stethoscope, ShieldCheck } from 'lucide-react';
 import { signInWithRole, getCurrentUser } from '../services/authService';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translateError } from '../utils/translateError';
 
 const ROLE_CONFIG = {
-  staff: { title: 'ER staff sign in', icon: Stethoscope, home: '/staff/scan' },
-  admin: { title: 'Hospital admin sign in', icon: ShieldCheck, home: '/admin' },
+  staff: { title: 'loginStaffTitle', icon: Stethoscope, home: '/staff/scan' },
+  admin: { title: 'loginAdminTitle', icon: ShieldCheck, home: '/admin' },
 };
 
 export function RoleLoginPage() {
   const { role } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const config = ROLE_CONFIG[role];
 
   const [form, setForm] = useState({ username: '', password: '' });
@@ -39,15 +42,15 @@ export function RoleLoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!form.username.trim()) return setError('Enter your username.');
-    if (!form.password) return setError('Enter your password.');
+    if (!form.username.trim()) return setError(t('errEnterUsername'));
+    if (!form.password) return setError(t('errEnterPassword'));
 
     setBusy(true);
     try {
       const { user } = await signInWithRole({ role, ...form });
       navigate(user.mustChange ? '/change-password' : config.home, { replace: true });
     } catch (err) {
-      setError(err?.message || 'Could not sign in. Please try again.');
+      setError(translateError(err, t, 'errSignInFailed'));
     } finally {
       setBusy(false);
     }
@@ -60,8 +63,8 @@ export function RoleLoginPage() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-red-600 text-white">
             <Icon className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-semibold text-slate-900">{config.title}</h1>
-          <p className="mt-1 text-sm text-slate-600">Use the username and password given to you.</p>
+          <h1 className="text-2xl font-semibold text-slate-900">{t(config.title)}</h1>
+          <p className="mt-1 text-sm text-slate-600">{t('loginRoleHint')}</p>
         </div>
 
         <div role="alert" aria-live="polite">
@@ -75,7 +78,7 @@ export function RoleLoginPage() {
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div>
             <label htmlFor="username" className="mb-1 block text-sm font-medium text-slate-700">
-              Username
+              {t('username')}
             </label>
             <div className="relative">
               <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
@@ -93,7 +96,7 @@ export function RoleLoginPage() {
 
           <div>
             <label htmlFor="password" className="mb-1 block text-sm font-medium text-slate-700">
-              Password
+              {t('password')}
             </label>
             <div className="relative">
               <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
@@ -109,7 +112,7 @@ export function RoleLoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPw((s) => !s)}
-                aria-label={showPw ? 'Hide password' : 'Show password'}
+                aria-label={showPw ? t('hidePassword') : t('showPassword')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
               >
                 {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -122,13 +125,13 @@ export function RoleLoginPage() {
             disabled={busy}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 font-medium text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600/40 disabled:opacity-60"
           >
-            {busy && <Loader2 className="h-4 w-4 animate-spin" />} Sign in
+            {busy && <Loader2 className="h-4 w-4 animate-spin" />} {t('login')}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm">
           <Link to="/select-role" className="font-medium text-red-700 hover:underline">
-            Choose a different role
+            {t('changeRole')}
           </Link>
         </p>
       </div>

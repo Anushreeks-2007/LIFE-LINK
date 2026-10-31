@@ -8,7 +8,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { AuthButton } from './AuthButton';
 import {
   Activity, PhoneCall, Search, MapPin, Mic, Database,
-  Building2, Stethoscope, User, Menu, X, AlertCircle,ChevronDown
+  Building2, Stethoscope, User, Menu, X, AlertCircle, ChevronDown,
 } from 'lucide-react';
 
 const COMMON_LINKS = [
@@ -55,11 +55,11 @@ export function Navbar() {
                   LIFE-LINK
                 </span>
                 <span className="hidden sm:inline text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200">
-                  Health
+                  {t('badgeHealth')}
                 </span>
               </div>
               <p className="hidden xl:block whitespace-nowrap text-[10px] text-slate-600 font-medium">
-                Connecting Lives, Saving Time.
+                {t('tagline')}
               </p>
             </div>
           </Link>
@@ -109,10 +109,10 @@ export function Navbar() {
                   to="/emergency"
                   onClick={closeMenu}
                   className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-3 py-2 rounded-xl shadow-md shadow-rose-600/40 emergency-pulse transition active:scale-95"
-                  aria-label="Emergency Assistance"
+                  aria-label={t('navEmergency')}
                 >
                   <PhoneCall className="w-3.5 h-3.5" />
-                  <span className="tracking-wide uppercase font-extrabold">Emergency</span>
+                  <span className="tracking-wide uppercase font-extrabold">{t('navEmergencyBtn')}</span>
                 </Link>
                 <button
                   type="button"

@@ -2,30 +2,17 @@ import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HeartPulse, User, Stethoscope, ShieldCheck } from 'lucide-react';
 import { getCurrentUser } from '../services/authService';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const ROLES = [
-  {
-    to: '/auth',
-    icon: User,
-    title: 'Citizen',
-    text: 'Find hospitals and manage your emergency profile.',
-  },
-  {
-    to: '/login/staff',
-    icon: Stethoscope,
-    title: 'ER staff',
-    text: 'Scan patient QR codes and manage emergency cases.',
-  },
-  {
-    to: '/login/admin',
-    icon: ShieldCheck,
-    title: 'Hospital admin',
-    text: 'Update bed availability and medicine inventory.',
-  },
+  { to: '/auth', icon: User, title: 'roleCitizen', text: 'roleCitizenDesc' },
+  { to: '/login/staff', icon: Stethoscope, title: 'roleStaff', text: 'roleStaffDesc' },
+  { to: '/login/admin', icon: ShieldCheck, title: 'roleAdmin', text: 'roleAdminDesc' },
 ];
 
 export function RoleSelectPage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Already signed in? Skip the role screen.
   useEffect(() => {
@@ -43,8 +30,8 @@ export function RoleSelectPage() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-red-600 text-white">
             <HeartPulse className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-semibold text-slate-900">Welcome to LIFE-LINK</h1>
-          <p className="mt-1 text-sm text-slate-600">Choose how you want to continue.</p>
+          <h1 className="text-2xl font-semibold text-slate-900">{t('roleWelcome')}</h1>
+          <p className="mt-1 text-sm text-slate-600">{t('roleChoose')}</p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-3">
@@ -57,15 +44,15 @@ export function RoleSelectPage() {
               <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-700 transition group-hover:bg-red-600 group-hover:text-white">
                 <Icon className="h-5 w-5" />
               </span>
-              <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-              <p className="mt-1 text-sm text-slate-600">{text}</p>
+              <h2 className="text-lg font-semibold text-slate-900">{t(title)}</h2>
+              <p className="mt-1 text-sm text-slate-600">{t(text)}</p>
             </Link>
           ))}
         </div>
 
         <p className="mt-8 text-center text-xs text-slate-500">
-          In a medical emergency, call <strong>112</strong> or <strong>108</strong>.{' '}
-          <Link to="/privacy-help" className="underline">Privacy</Link>
+          {t('emergencyNote')}{' '}
+          <Link to="/privacy-help" className="underline">{t('navPrivacy')}</Link>
         </p>
       </div>
     </div>

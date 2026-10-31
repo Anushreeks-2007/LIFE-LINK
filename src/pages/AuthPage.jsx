@@ -10,9 +10,11 @@ import {
   getCurrentUser,
   onAuthChange,
 } from '../services/authService';
- 
+import { useLanguage } from '../contexts/LanguageContext';
+import { translateError } from '../utils/translateError';
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
- 
+
 function GoogleLogo() {
   return (
     <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
@@ -23,7 +25,7 @@ function GoogleLogo() {
     </svg>
   );
 }
- 
+
 function Field({ id, label, icon: Icon, type = 'text', value, onChange, autoComplete, right, hint }) {
   return (
     <div>
@@ -47,19 +49,20 @@ function Field({ id, label, icon: Icon, type = 'text', value, onChange, autoComp
     </div>
   );
 }
- 
+
 export function AuthPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLanguage();
   const redirectTo = location.state?.from?.pathname || '/';
- 
+
   const [mode, setMode] = useState('signin'); // 'signin' | 'signup' | 'forgot'
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
   const [showPw, setShowPw] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
- 
+
   // Already signed in? Also handles the return trip from Google / email-confirm links.
   useEffect(() => {
     let active = true;
@@ -70,38 +73,37 @@ export function AuthPage() {
       off();
     };
   }, [navigate, redirectTo]);
- 
+
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
- 
+
   const switchMode = (next) => {
     setMode(next);
     setError('');
     setNotice('');
     setForm((f) => ({ ...f, password: '', confirm: '' }));
   };
- 
+
   const validate = () => {
-    if (mode === 'signup' && form.name.trim().length < 2) return 'Enter your full name.';
-    if (!EMAIL_RE.test(form.email.trim())) return 'Enter a valid email address.';
+    if (mode === 'signup' && form.name.trim().length < 2) return t('errName');
+    if (!EMAIL_RE.test(form.email.trim())) return t('errEmail');
     if (mode === 'forgot') return '';
     if (mode === 'signup') {
-      if (form.password.length < 8) return 'Password must be at least 8 characters.';
-      if (!/[A-Za-z]/.test(form.password) || !/\d/.test(form.password))
-        return 'Password must include at least one letter and one number.';
-      if (form.password !== form.confirm) return 'Passwords do not match.';
+      if (form.password.length < 8) return t('errPwLen');
+      if (!/[A-Za-z]/.test(form.password) || !/\d/.test(form.password)) return t('errPwMix');
+      if (form.password !== form.confirm) return t('errPwMatch');
     } else if (!form.password) {
-      return 'Enter your password.';
+      return t('errEnterPassword');
     }
     return '';
   };
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setNotice('');
     const problem = validate();
     if (problem) return setError(problem);
- 
+
     setBusy(true);
     try {
       if (mode === 'signin') {
@@ -110,26 +112,22 @@ export function AuthPage() {
       } else if (mode === 'signup') {
         const { needsEmailConfirmation } = await signUp(form);
         if (needsEmailConfirmation) {
-          setNotice('Account created. Check your email and click the confirmation link, then sign in.');
+          setNotice(t('noticeCreated'));
           setMode('signin');
         } else {
           navigate(redirectTo, { replace: true });
         }
       } else {
         const res = await sendPasswordReset(form.email);
-        setNotice(
-          res.demo
-            ? 'Demo mode: no email is sent. Connect Supabase to enable password reset emails.'
-            : 'If an account exists for this email, a reset link is on its way.'
-        );
+        setNotice(res.demo ? t('noticeDemoReset') : t('noticeResetSent'));
       }
     } catch (err) {
-      setError(err?.message || 'Something went wrong. Please try again.');
+      setError(translateError(err, t, 'errGeneric'));
     } finally {
       setBusy(false);
     }
   };
- 
+
   const handleGoogle = async () => {
     setError('');
     setNotice('');
@@ -138,17 +136,17 @@ export function AuthPage() {
       await signInWithGoogle();
       if (isDemoAuth) navigate(redirectTo, { replace: true });
     } catch (err) {
-      setError(err?.message || 'Google sign-in failed. Please try again.');
+      setError(translateError(err, t, 'errGoogle'));
       setBusy(false);
     }
   };
- 
+
   const titles = {
-    signin: ['Sign in to LIFE-LINK', 'Access your emergency profile and hospital tools.'],
-    signup: ['Create your account', 'Set up your emergency profile before you need it.'],
-    forgot: ['Reset your password', "Enter your email and we'll send a reset link."],
+    signin: [t('authSignInTitle'), t('authSignInSub')],
+    signup: [t('authSignUpTitle'), t('authSignUpSub')],
+    forgot: [t('authForgotTitle'), t('authForgotSub')],
   };
- 
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-slate-50 px-4 py-10">
       <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
@@ -159,13 +157,11 @@ export function AuthPage() {
           <h1 className="text-2xl font-semibold text-slate-900">{titles[mode][0]}</h1>
           <p className="mt-1 text-sm text-slate-600">{titles[mode][1]}</p>
         </div>
- 
+
         {isDemoAuth && (
-          <p className="mb-4 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
-            Demo mode: accounts are stored only in this browser. Add your Supabase keys to use real accounts.
-          </p>
+          <p className="mb-4 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">{t('demoBanner')}</p>
         )}
- 
+
         <div role="alert" aria-live="polite">
           {error && (
             <p className="mb-4 flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -178,7 +174,7 @@ export function AuthPage() {
             </p>
           )}
         </div>
- 
+
         {mode !== 'forgot' && (
           <>
             <button
@@ -188,46 +184,46 @@ export function AuthPage() {
               className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-600/30 disabled:opacity-60"
             >
               <GoogleLogo />
-              Continue with Google
+              {t('continueGoogle')}
             </button>
             <div className="my-5 flex items-center gap-3 text-xs text-slate-400">
               <span className="h-px flex-1 bg-slate-200" />
-              or use your email
+              {t('orEmail')}
               <span className="h-px flex-1 bg-slate-200" />
             </div>
           </>
         )}
- 
+
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           {mode === 'signup' && (
-            <Field id="name" label="Full name" icon={User} value={form.name} onChange={set('name')} autoComplete="name" />
+            <Field id="name" label={t('fullName')} icon={User} value={form.name} onChange={set('name')} autoComplete="name" />
           )}
- 
+
           <Field
             id="email"
-            label="Email"
+            label={t('email')}
             icon={Mail}
             type="email"
             value={form.email}
             onChange={set('email')}
             autoComplete="email"
           />
- 
+
           {mode !== 'forgot' && (
             <Field
               id="password"
-              label="Password"
+              label={t('password')}
               icon={Lock}
               type={showPw ? 'text' : 'password'}
               value={form.password}
               onChange={set('password')}
               autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
-              hint={mode === 'signup' ? 'At least 8 characters, with a letter and a number.' : undefined}
+              hint={mode === 'signup' ? t('pwHint') : undefined}
               right={
                 <button
                   type="button"
                   onClick={() => setShowPw((s) => !s)}
-                  aria-label={showPw ? 'Hide password' : 'Show password'}
+                  aria-label={showPw ? t('hidePassword') : t('showPassword')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
                   {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -235,11 +231,11 @@ export function AuthPage() {
               }
             />
           )}
- 
+
           {mode === 'signup' && (
             <Field
               id="confirm"
-              label="Confirm password"
+              label={t('confirmPassword')}
               icon={Lock}
               type={showPw ? 'text' : 'password'}
               value={form.confirm}
@@ -247,7 +243,7 @@ export function AuthPage() {
               autoComplete="new-password"
             />
           )}
- 
+
           {mode === 'signin' && (
             <div className="text-right">
               <button
@@ -255,53 +251,56 @@ export function AuthPage() {
                 onClick={() => switchMode('forgot')}
                 className="text-sm font-medium text-red-700 hover:underline"
               >
-                Forgot password?
+                {t('forgotLink')}
               </button>
             </div>
           )}
- 
+
           <button
             type="submit"
             disabled={busy}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 font-medium text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600/40 disabled:opacity-60"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-            {mode === 'signin' && 'Sign in'}
-            {mode === 'signup' && 'Create account'}
-            {mode === 'forgot' && 'Send reset link'}
+            {mode === 'signin' && t('login')}
+            {mode === 'signup' && t('createAccount')}
+            {mode === 'forgot' && t('sendReset')}
           </button>
         </form>
- 
+
         <p className="mt-6 text-center text-sm text-slate-600">
           {mode === 'signin' && (
             <>
-              New to LIFE-LINK?{' '}
+              {t('newToApp')}{' '}
               <button onClick={() => switchMode('signup')} className="font-medium text-red-700 hover:underline">
-                Create an account
+                {t('createAccount')}
               </button>
             </>
           )}
           {mode === 'signup' && (
             <>
-              Already have an account?{' '}
+              {t('haveAccount')}{' '}
               <button onClick={() => switchMode('signin')} className="font-medium text-red-700 hover:underline">
-                Sign in
+                {t('login')}
               </button>
             </>
           )}
           {mode === 'forgot' && (
             <button onClick={() => switchMode('signin')} className="font-medium text-red-700 hover:underline">
-              Back to sign in
+              {t('backToSignIn')}
             </button>
           )}
         </p>
- 
+
         <p className="mt-4 text-center text-xs text-slate-500">
-          In a medical emergency, call <strong>112</strong> or <strong>108</strong>. You do not need an account to find a hospital.{' '}
-          <Link to="/privacy-help" className="underline">Privacy</Link>
+          {t('emergencyNote')} {t('noAccountNeeded')}{' '}
+          <Link to="/privacy-help" className="underline">{t('navPrivacy')}</Link>
+        </p>
+
+        <p className="mt-3 text-center text-xs">
+          <Link to="/select-role" className="font-medium text-red-700 hover:underline">{t('changeRole')}</Link>
         </p>
       </div>
     </div>
   );
 }
- 

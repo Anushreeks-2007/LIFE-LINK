@@ -1,4 +1,5 @@
 // Multilingual translations for LIFE-LINK: English, Kannada (ಕನ್ನಡ), and Hindi (हिन्दी)
+import { extraTranslations } from './translationsExtra';
 export const translations = {
   en: {
     // Brand & Navigation
@@ -354,3 +355,6 @@ export const translations = {
     loading: "जानकारी लोड हो रही है...",
   }
 };
+Object.keys(extraTranslations).forEach((lang) => {
+  translations[lang] = { ...translations[lang], ...extraTranslations[lang] };
+});
